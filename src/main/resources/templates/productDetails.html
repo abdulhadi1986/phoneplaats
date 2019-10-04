@@ -1,0 +1,632 @@
+<!doctype html>
+<html class="no-js" lang="nl" xmlns:th="http://wwww.thymeleaf.org">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>PhonePlaats</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Favicon -->
+    <link rel="shortcut icon" type="image/x-icon" th:href="@{/img/icon.png}">
+    
+    <!-- CSS 
+    ========================= -->
+
+
+    <!-- Plugins CSS -->
+    <link rel="stylesheet" href="css/plugins.css">
+    
+    <!-- Main Style CSS -->
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+    <div class="Offcanvas_menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="canvas_open" style="border-color:blue;">
+                        Menu<a href="javascript:void(0)"><i class="ion-navicon" style="border-color:blue;"></i></a>
+                    </div>
+                    <div class="Offcanvas_menu_wrapper">
+                        <div class="canvas_close">
+                              <a href="javascript:void(0)"><i class="ion-android-close"></i></a>  
+                        </div>
+                        <div class="header_support">
+                            <p><i class="icon ion-android-alarm-clock"></i> Voor 23:30 bestled, morgen bezorgd! - Support: <a href="tel:+(012)800456789">(012) 800 456 789 </a></p>
+                        </div>
+                        <div id="menu" class="text-left ">
+                            <ul class="offcanvas_main_menu">
+                                <li class="menu-item-has-children"><a  href="/">home</a>
+                                <li class="menu-item-has-children"><a href="/products">Producten</a> 
+                                    <ul class="sub-menu">
+                                        <li class="menu-item-has-children" th:each="category : ${categoryMap.keySet()}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}">
+                                            <span th:text="${category.getCategoryName()}"></span></a>
+                                            <ul class="sub-menu" th:if="${categoryMap.get(category)!=null}">
+                                                <li th:each="product: ${categoryMap.get(category)}">
+                                                    <a th:href="@{/productDetails(prodId=${product.getProductId()})}">
+                                                        <span th:text="${product.getProductName()}"></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>                                                                                                     
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="/overons">Over ons</i></a>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a href="/contact"> Contact Us</a>
+                                </li>
+                                <li>
+                                    
+                                </li>
+                                
+                            </ul>
+                        </div>
+                        <div class="Offcanvas_footer">
+                            <div class="mini_cart_wrapper">
+                                <a href="/shoppingcart">
+                                   <span class="cart_icon">
+                                       <i class="ion-android-cart"></i>
+                                   </span>
+                                   <span class="cart_title" th:if="${shoppingItemsCount>0}">
+                                        <span class="cart_quantity" th:text="${shoppingItemsCount}+ ' item(s)'"></span>
+                                        <span class="cart_price" th:text="' &euro; '+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
+                                    </span>
+                                    <span class="cart_title" th:if="${shoppingItemsCount==0}">
+                                            <span class="cart_quantity">0 artikelen</span>                                                        
+                                    </span>
+                                </a>
+                                <!--mini cart end-->
+                                </div>
+                            <span><a href="#"><i class="fa fa-envelope-o"></i> info@phoneplaats.nl</a></span>
+                            <ul>
+                                <li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li class="pinterest"><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+                                <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Offcanvas menu area end-->
+     <!--header area start-->
+    <header>
+        <div class="main_header common_header">
+            <!--header top start-->
+            <div class="header_top">
+                <div class="container">  
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 col-md-4">
+                            
+                        </div>
+                        <div class="col-lg-8 col-md-9">
+                            <div class="top_right text-right">
+                                <div class="header_support">
+                                    <p><i class="icon ion-android-alarm-clock"></i> Voor 23:30 bestled, morgen bezorgd! - Support: <a href="tel:+(012)800456789">(012) 800 456 789 </a></p>
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--header top start-->
+            <!--header middel start-->
+            <div class="header_middle sticky-header">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-3 col-md-6">
+                            <div >
+                                <a href="/home"><img src="img/logo-sm.png" alt="" style="width:260px; height:41px;"></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-12">
+                            <div class="main_menu menu_position text-right"> 
+                                <nav>  
+                                    <ul>
+                                        <li><a  href="/">home</a>
+                                            
+                                        </li>
+                                        <li class="mega_items"><a class="active" href="/products">Producten<i class="fa fa-angle-down"></i></a> 
+                                            <div class="mega_menu">
+                                                <ul class="mega_menu_inner">
+                                                    <li th:each="category : ${categoryMap.keySet()}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}">
+                                                        <span th:text="${category.getCategoryName()}"></span></a>
+                                                        <ul th:if="${categoryMap.get(category)!=null}">
+                                                            <li th:each="product: ${categoryMap.get(category)}">
+                                                                <a th:href="@{/productDetails(prodId=${product.getProductId()})}">
+                                                                    <span th:text="${product.getProductName()}"></span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>                                                                                                     
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li><a href="/overons">Over ons</i></a></li>
+                                        <li><a href="/contact"> Contact Us</a></li>
+                                        <li>
+                                            <div class="mini_cart_wrapper">
+                                            <a href="/shoppingcart">
+                                               <span class="cart_icon">
+                                                   <i class="ion-android-cart"></i>
+                                               </span>
+                                               <span class="cart_title" th:if="${shoppingItemsCount>0}">
+                                                    <span class="cart_quantity" th:text="${shoppingItemsCount}+ ' item(s)'"></span>
+                                                    <span class="cart_price" th:text="'&euro;'+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
+                                                </span>
+                                                <span class="cart_title" th:if="${shoppingItemsCount==0}">
+                                                        <span class="cart_quantity">0 artikelen</span>                                                        
+                                                </span>
+                                            </a>
+                                            <!--mini cart end-->
+                                            </div>
+                                        </li>
+                                    </ul>  
+                                </nav> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!--header middel end-->
+            
+        </div> 
+    </header>
+    <!--header area end-->   
+    
+    <!--product details start-->
+    <div class="product_details mt-45 mb-50">
+			<div class="container">
+				<div class="row">
+					<div id="productImages" class="col-md-6 border-right">
+							<div class="bd-example">
+								<div th:id="'productCarousel'+${product.getProductId()}" class="carousel slide" data-ride="carousel" data-interval="false">
+									<ol class="carousel-indicators">
+										<li th:each="num :${product.getProductImages()}" th:data-target="'#productCarousel'+${product.getProductId()}" data-slide-to="0" class="active"></li>
+									</ol>
+									<div class="carousel-inner">
+										<div class="justify-content-center" style="width: 300px; height: 450px; 
+																					background-color: white; 
+																					margin-left: auto;
+																					margin-right: auto;
+																					margin-top: auto;">
+											<div id="image" class="carousel-item" th:each="images : ${product.getProductImages()}">
+												<img class="img-fluid" style="display: block;
+															margin-left: auto;
+														margin-right: auto;" 
+													th:src="${images.getImageUri()}" alt="">
+											</div>
+											<div id="image" class="carousel-item">
+												<img style="display: block;
+															margin-left: auto;
+														margin-right: auto;" 
+													src="/img/brand/accessories.jpg" alt="">
+											</div>
+										</div>
+									</div>									
+									<a class="carousel-control-prev" th:href="'#productCarousel'+${product.getProductId()}" role="button" data-slide="prev" style="background-color:rgb(221, 221, 221)">
+										<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+										<span class="sr-only">Previous</span>
+									</a>
+									
+									<a class="carousel-control-next" th:href="'#productCarousel'+${product.getProductId()}" role="button" data-slide="next" style="background-color:rgb(221, 221, 221)">
+										<span class="carousel-control-next-icon" aria-hidden="true"></span>
+										<span class="sr-only">Next</span>
+									</a>
+								</div>
+							</div>
+							<div class="row col-md-12 justify-content-center" >
+								<div style="width: 102.75px; margin-right: 15px;" th:each="image : ${product.getProductImages()}" alt="zo-th-1">
+									<img class="img-fluid" th:src="${image.getImageUri()}" alt="zo-th-1"/>
+								</div>
+								<div style="width: 102.75px; margin-right: 15px;" alt="zo-th-1">
+									<img class="img-fluid" src="/img/brand/accessories.jpg" alt="zo-th-1"/>
+								</div>							
+							</div>
+						</div>  
+						<div id="productInfo" class="product_d_right col-lg-6 col-md-6">
+						<form action="#" th:action="@{/addToShoppingCart}" name ="product" th:object="${product}" method="post">
+							<div id="productName">
+								<input type="hidden" class="form-control" name = "productId" th:field="*{productId}">
+								<h3 class="monospaced" th:text="${product.getProductName()}"></h3>
+							</div>
+							<div id="productDesc" class="product_desc">
+								<h5 class="text-secondary" th:text="${product.getProductShortDesc()}"></h5>
+							</div>
+							<div class="product_rating">
+									<ul title="Grade A+++">
+										<li>Product conditie: </li>
+										<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+										<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+										<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+										<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+										<li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+									</ul>
+							</div>
+							
+		
+							<div class="price_box" id="productPrice"> 
+								<span class="old_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductPrice(), 0, 'POINT', 2, 'COMMA')}"></span> 
+								<span class="current_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductSalePrice(), 0, 'POINT', 2, 'COMMA')}"></span>
+							</div>
+																			
+							<div id="quantity" class="input-group mb-3 col-xs-1">
+								<a id="quantityMin" class="btn btn-light">-</a>
+								<input name="quantity" id="quantityInput" type="text" style="text-align: center; " size="2" th:value="1" readonly>
+								<a id="quantityPlus" class="btn btn-light">+</a>
+								<input id="availableQty" type="hidden" th:value="${product.getAvailableQty()}">	
+							</div>
+							<div><p class="text-danger" th:text="${quantityerror}"></p></div>
+							<div id="formControls" class="product_desc">
+								<button type="submit" id="addToCart" class="btn btn-primary">Toevoegen aan winkelwagen 
+									<i class="fa fa-shopping-cart" style="color:white;"></i>
+								</button>
+								<a th:href="@{/products}" class="btn btn-outline-secondary">Terug</a>
+							</div>
+							<div id="promoInfo" class="bg-light">
+								</br>
+								<ul class="group-list" style="list-style-type: none;">
+									<li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Zo goed als nieuw</li>
+									<li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Niet goed? geld terug</li>
+									<li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Simlockvrij</li>
+									<li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Inclusief bijbehorende accessoires</li> 
+									<li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;gratis bezorging en gratis retour</li>
+									<li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;30 dagen bedenktijd</li>
+									<li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;betaal snel en makkelijk met iDEAL</li>
+								</ul>
+								</br>	
+							</div>
+						</form>	
+					</div>	
+
+				</div>
+			</div>    
+		</div>
+		<!--product details end-->
+		<!--product info start-->
+		<div class="product_d_info mb-45">
+				<div class="container">   
+					<div class="row">
+						<div class="col-12">
+							<div class="product_d_inner">   
+								<div class="product_info_button">    
+									<ul class="nav" role="tablist">
+										<li >
+											<a class="active" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Specificaties   |</a>
+										</li>
+										<li>
+											<a data-toggle="tab" href="#sheet" role="tab" aria-controls="sheet" aria-selected="false">Extra informatie</a>
+									   </li>										
+									</ul>
+								</div>
+								<div class="tab-content">
+									<div class="tab-pane fade show active" id="info" role="tabpanel" >
+										<div class="product_info_content">
+											<p th:each="spec : ${formattedSpec}">
+												<label th:text="'-  ' +${spec}"></label></br>
+											</p>
+										</div>    
+									</div>
+									<div class="tab-pane fade" id="sheet" role="tabpanel" >
+										<div class="product_info_content">
+											<p th:text="${product.getProductShortDesc()}"></p>
+										</div>    
+									</div>
+								</div>
+							</div>     
+						</div>
+					</div>
+				</div>    
+			</div>  
+			<!--product info end-->
+    <!--CONTAINER page-->
+   
+   
+    <!--footer area start-->
+    <footer class="footer_widgets">
+			<!--newsletter area start-->
+			<div class="newsletter_area">
+				<div class="container">
+					<div class="row">
+						<div class="col-12">
+							<div class="newsletter_container">
+								<div class="newsletter_content">
+									<div class="newsletter_icone">
+									   <img src="img/about/newsletter-icon.png" alt="">
+									</div>
+									<div class="newsletter_text">
+										<h3>Sign Up For Newsletters</h3>
+										<p>Get E-mail updates about our latest shop and special offers.</p>
+									</div>
+								</div>
+								<div class="subscribe_form">
+									<form id="mc-form" class="mc-form footer-newsletter" >
+										<input id="mc-email" type="email" autocomplete="off" placeholder="Your email address..." />
+										<button id="mc-submit">Subscribe</button>
+									</form>
+									<!-- mailchimp-alerts Start -->
+									<div class="mailchimp-alerts text-centre">
+										<div class="mailchimp-submitting"></div><!-- mailchimp-submitting end -->
+										<div class="mailchimp-success"></div><!-- mailchimp-success end -->
+										<div class="mailchimp-error"></div><!-- mailchimp-error end -->
+									</div><!-- mailchimp-alerts end -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--newsletter area end-->
+			<div class="footer_top">
+				<div class="container">
+					<div class="row">
+						<div class="col-lg-4 col-md-8 col-sm-12">
+							<div class="widgets_container contact_us">
+							   <h3>Contacts us</h3>
+								<div class="footer_contact">
+									<p><span>Address:</span> 123 Main Street, Anytown, CA 12345 - USA.</p>
+									<p><span>Phone:</span> <a href="tel:(012)800456789">(012) 800 456 789</a></p>
+									<p><span>Fax:</span> <a href="tel:(012)800456789">(012) 800 456 789</a></p>
+									<p><span>Email:</span> <a href="#">demo@towerthemes.com</a></p>
+									
+								</div>
+								 <div class="footer_payment">
+									<p>Payment Methods:</p>
+									<img src="img/icon/payment.png" alt="">
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-4 col-sm-6">
+							<div class="widgets_container widget_menu">
+								<h3>Information</h3>
+								<div class="footer_menu">
+									<ul>
+										<li><a href="about.html">About Us</a></li>
+										<li><a href="#">Delivery Information</a></li>
+										<li><a href="#">New products</a></li>
+										<li><a href="#">Best sales</a></li>
+										<li><a href="my-account.html">My Account</a></li>
+										<li><a href="#">Order History</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-4 col-sm-6">
+							<div class="widgets_container widget_menu">
+								<h3>My Account</h3>
+								<div class="footer_menu">
+									<ul>
+										<li><a href="my-account.html">My Account</a></li>
+										<li><a href="cart.html">Shopping Cart</a></li>
+										<li><a href="wishlist.html">Wish List</a></li>
+										<li><a href="#">Prices drop</a></li>
+										<li><a href="#">Order History</a></li>
+										<li><a href="#">International Orders</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-4 col-sm-6">
+							<div class="widgets_container widget_menu">
+								<h3>Customer Service</h3>
+								<div class="footer_menu">
+									<ul>
+										<li><a href="#">Sitemap</a></li>
+										<li><a href="my-account.html">My Account</a></li>
+										<li><a href="#">Delivery Information</a></li>
+										<li><a href="#">Order History</a></li>
+										<li><a href="wishlist.html">Wish List</a></li>
+										<li><a href="#">Specials</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<div class="col-lg-2 col-md-4 col-sm-6">
+							<div class="widgets_container widget_menu">
+								<h3>Let Us Help You</h3>
+								<div class="footer_menu">
+									<ul>
+										<li><a href="my-account.html">My Account</a></li>
+										<li><a href="about.html">About Us</a></li>
+										<li><a href="#">Shipping Rates</a></li>
+										<li><a href="#">Amazon Prime</a></li>
+										<li><a href="wishlist.html">Wish List</a></li>
+										<li><a href="#">Manage Your Content</a></li>
+									</ul>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="footer_bottom">
+				<div class="container">
+					<div class="row align-items-center">
+						<div class="col-lg-6 col-md-6">
+							<div class="copyright_area">
+								<p>Copyright &copy; 2019 <a href="#">Rusu</a>  All Right Reserved.</p>
+							</div>
+						</div>
+						<div class="col-lg-6 col-md-6">
+						   <div class="footer_social text-right">
+							   <ul>
+								   <li><a href="#"><i class="fa fa-facebook"></i></a></li>
+								   <li><a href="#"><i class="fa fa-twitter"></i></a></li>
+								   <li><a href="#"><i class="fa fa-instagram"></i></a></li>
+								   <li><a href="#"><i class="fa fa-linkedin"></i></a></li>
+								   <li><a href="#"><i class="fa fa-rss"></i></a></li>
+							   </ul>
+						   </div>
+						</div>
+					</div>
+				</div>
+			</div>   
+		</footer>
+		<!--footer area end-->
+		
+		<!-- modal area start-->
+		<div class="modal fade" id="modal_box" tabindex="-1" role="dialog"  aria-hidden="true">
+			<div class="modal-dialog modal-dialog-centered" role="document">
+				<div class="modal-content">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					  <span aria-hidden="true">&times;</span>
+					</button>
+					<div class="modal_body">
+						<div class="container">
+							<div class="row">
+								<div class="col-lg-5 col-md-5 col-sm-12">
+									<div class="modal_tab">  
+										<div class="tab-content product-details-large">
+											<div class="tab-pane fade show active" id="tab1" role="tabpanel" >
+												<div class="modal_tab_img">
+													<a href="#"><img src="img/product/productbig5.jpg" alt=""></a>    
+												</div>
+											</div>
+											<div class="tab-pane fade" id="tab2" role="tabpanel">
+												<div class="modal_tab_img">
+													<a href="#"><img src="img/product/productbig4.jpg" alt=""></a>    
+												</div>
+											</div>
+											<div class="tab-pane fade" id="tab3" role="tabpanel">
+												<div class="modal_tab_img">
+													<a href="#"><img src="img/product/productbig3.jpg" alt=""></a>    
+												</div>
+											</div>
+											<div class="tab-pane fade" id="tab4" role="tabpanel">
+												<div class="modal_tab_img">
+													<a href="#"><img src="img/product/productbig2.jpg" alt=""></a>    
+												</div>
+											</div>
+										</div>
+										<div class="modal_tab_button">    
+											<ul class="nav product_navactive owl-carousel" role="tablist">
+												<li >
+													<a class="nav-link active" data-toggle="tab" href="#tab1" role="tab" aria-controls="tab1" aria-selected="false"><img src="img/product/product8.jpg" alt=""></a>
+												</li>
+												<li>
+													 <a class="nav-link" data-toggle="tab" href="#tab2" role="tab" aria-controls="tab2" aria-selected="false"><img src="img/product/product6.jpg" alt=""></a>
+												</li>
+												<li>
+												   <a class="nav-link button_three" data-toggle="tab" href="#tab3" role="tab" aria-controls="tab3" aria-selected="false"><img src="img/product/product7.jpg" alt=""></a>
+												</li>
+												<li>
+												   <a class="nav-link" data-toggle="tab" href="#tab4" role="tab" aria-controls="tab4" aria-selected="false"><img src="img/product/product5.jpg" alt=""></a>
+												</li>
+	
+											</ul>
+										</div>    
+									</div>  
+								</div> 
+								<div class="col-lg-7 col-md-7 col-sm-12">
+									<div class="modal_right">
+										<div class="modal_title mb-10">
+											<h2>Sit voluptatem rhoncus sem lectus</h2> 
+										</div>
+										<div class="modal_price mb-10">
+											<span class="new_price">$64.99</span>    
+											<span class="old_price" >$78.99</span>    
+										</div>
+										<div class="modal_description mb-15">
+											<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Mollitia iste laborum ad impedit pariatur esse optio tempora sint ullam autem deleniti nam in quos qui nemo ipsum numquam, reiciendis maiores quidem aperiam, rerum vel recusandae </p>    
+										</div> 
+										<div class="variants_selects">
+											<div class="variants_size">
+											   <h2>size</h2>
+											   <select class="select_option">
+												   <option selected value="1">s</option>
+												   <option value="1">m</option>
+												   <option value="1">l</option>
+												   <option value="1">xl</option>
+												   <option value="1">xxl</option>
+											   </select>
+											</div>
+											<div class="variants_color">
+											   <h2>color</h2>
+											   <select class="select_option">
+												   <option selected value="1">purple</option>
+												   <option value="1">violet</option>
+												   <option value="1">black</option>
+												   <option value="1">pink</option>
+												   <option value="1">orange</option>
+											   </select>
+											</div>
+											<div class="modal_add_to_cart">
+												<form action="#">
+													<input min="1" max="100" step="2" value="1" type="number">
+													<button type="submit">add to cart</button>
+												</form>
+											</div>   
+										</div>
+										<div class="modal_social">
+											<h2>Share this product</h2>
+											<ul>
+												<li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
+												<li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
+												<li class="pinterest"><a href="#"><i class="fa fa-pinterest"></i></a></li>
+												<li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
+												<li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+											</ul>    
+										</div>      
+									</div>    
+								</div>    
+							</div>     
+						</div>
+					</div>    
+				</div>
+			</div>
+		</div>
+		<!-- modal area end-->
+	
+	
+	
+	
+     <!--------------------------------------------------------------------------------------------------------------------------------->
+
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+   <!-- JS
+	============================================ -->
+	
+	<!-- Plugins JS -->
+	<script src="js/plugins.js"></script>
+	
+	<!-- Main JS -->
+	<script src="js/main.js"></script>
+
+    <script> $(document).ready(function() {
+    	console.log("count value "+$("#shopingCartItems").text());
+    	console.log("available qty : "+ $("#availableQty").val())
+    	if ($("#shopingCartItems").text()==='0') {
+    		$("#shopingCartItems").remove();
+		} 
+    	$(".carousel-item").first().addClass("active");
+    	
+    	$("#quantityMin").click(function() {
+    		if($("#quantityInput").val()-1 >0){
+    			$("#quantityInput").val(Number($("#quantityInput").val())-1);
+    		}else{$("#quantityInput").val(1)}
+    	});
+    	
+    	$("#quantityPlus").click(function() {
+    		console.log($("#availableQty").val());
+    		if($("#quantityInput").val() < $("#availableQty").val()){
+    			$("#quantityInput").val(Number($("#quantityInput").val())+1);
+    		}
+    	}); 
+    		
+    		
+    	
+    });
+    </script>
+  </body>
+</html>
