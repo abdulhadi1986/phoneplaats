@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
+import nl.phoneplaats.phoneplaats.dto.Category;
 import nl.phoneplaats.phoneplaats.dto.Inventory;
 import nl.phoneplaats.phoneplaats.dto.Order;
 import nl.phoneplaats.phoneplaats.dto.OrderDetail;
@@ -51,6 +51,8 @@ public class AdminController {
 	
 	@Autowired
 	private AdminServices adminServices;
+	
+	private static Map<String, List<Order>> salesOverview = new HashMap<>();
 	
 	private static Logger logger = LoggerFactory.getLogger(AdminController.class);
 	
@@ -90,7 +92,7 @@ public class AdminController {
 		model.addAttribute("error", error);
 		model.addAttribute("productImage", new ProductImage());
 		
-		Map<String, List<Order>> salesOverview= adminServices.getSalesOverview();
+		salesOverview= adminServices.getSalesOverview();
 		for (String s : salesOverview.keySet()) {
 			for( Order o : salesOverview.get(s)) {
 				System.out.println(o.getOrderDate()+" "+ o.getFunctionalId() +" " + o.getOrderTotal());
@@ -207,10 +209,22 @@ public class AdminController {
 		
 	}
 	
-	@RequestMapping(value="/test", method=RequestMethod.GET)
-	public String testCode(HttpServletRequest request) {
-		request.setAttribute("code", "testCode");
-		return "NewFile";		
+	@RequestMapping(value="/admin/mgt/addcategory", method=RequestMethod.GET)
+	public String getCategories(Model model, HttpSession session) {
+		if (session.getAttribute("adminLoggedIn") == null || session.getAttribute("adminLoggedIn").equals("false") )
+			return "login";
+		
+		model.addAttribute("allCategories", categoryRepo.findAll());
+		return "addcategory";		
+	}
+	
+	@RequestMapping(value="/admin/mgt/addcategory", method=RequestMethod.POST)
+	public String addCategory(Category category, HttpSession session) {
+		if (session.getAttribute("adminLoggedIn") == null || session.getAttribute("adminLoggedIn").equals("false") )
+			return "login";
+		
+		categoryRepo.save(category);
+		return "redirect:/admin/mgt/addcategory";		
 	}
 	
 	
