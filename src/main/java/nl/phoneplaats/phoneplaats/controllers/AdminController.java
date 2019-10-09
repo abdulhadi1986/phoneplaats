@@ -227,5 +227,20 @@ public class AdminController {
 		return "redirect:/admin/mgt/addcategory";		
 	}
 	
+	@RequestMapping(value="/admin/salesoverview", method=RequestMethod.GET)
+	public String getSalesOverview(Model model, HttpSession session){
+		if (session.getAttribute("adminLoggedIn") == null || session.getAttribute("adminLoggedIn").equals("false") )
+			return "login";
+		Map<String, String> overviewGroupByMonth = new HashMap<>();
+		for (String month:salesOverview.keySet()) {
+			Double subtotal=0.00d;
+			for (Order order : salesOverview.get(month)) {
+				subtotal += order.getOrderTotal();
+			}
+			overviewGroupByMonth.put(month, String.valueOf(subtotal));			
+		}
+		model.addAttribute("allSales", overviewGroupByMonth);
+		return "salesoverview";
+	}
 	
 }
