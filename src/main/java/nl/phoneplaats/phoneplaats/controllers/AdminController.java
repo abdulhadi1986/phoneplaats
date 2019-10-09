@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -94,15 +95,7 @@ public class AdminController {
 		model.addAttribute("productImage", new ProductImage());
 		
 		salesOverview= adminServices.getSalesOverview();
-		for (String s : salesOverview.keySet()) {
-			for( Order o : salesOverview.get(s)) {
-				System.out.println(o.getOrderDate()+" "+ o.getFunctionalId() +" " + o.getOrderTotal());
-				for (OrderDetail or: o.getOrderDetails()) {
-					System.out.println(or.getProduct().getProductName() +" "+ or.getProduct().getProductPrice());
-				}
-			}
-		}
-		
+				
 		return "productsmgt";
 	}
 	
@@ -233,6 +226,8 @@ public class AdminController {
 		if (session.getAttribute("adminLoggedIn") == null || session.getAttribute("adminLoggedIn").equals("false") )
 			return "login";
 		Map<String, String> overviewGroupByMonth = new HashMap<>();
+		if (salesOverview.isEmpty())
+			salesOverview = adminServices.getSalesOverview();
 		for (String month:salesOverview.keySet()) {
 			Double subtotal=0.00d;
 			for (Order order : salesOverview.get(month)) {
@@ -242,6 +237,21 @@ public class AdminController {
 		}
 		model.addAttribute("allSales", overviewGroupByMonth);
 		return "salesoverview";
+	}
+	
+	@RequestMapping(value="/admin/monthlysalesoverview", method=RequestMethod.GET)
+	public String getSalesForMonth(@RequestParam("month") String month, Model model, HttpSession session) {
+		if (session.getAttribute("adminLoggedIn") == null || session.getAttribute("adminLoggedIn").equals("false") )
+			return "login";
+		
+		List <OrderDetail> allOrders = new ArrayList<>();
+		for (Order order : salesOverview.get(month)) {
+			allOrders.addAll(order.getOrderDetails());
+		}
+		model.addAttribute("month", month);
+		model.addAttribute("allOrders", allOrders);
+		return "monthlysales";
+		
 	}
 	
 }

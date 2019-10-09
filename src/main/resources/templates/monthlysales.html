@@ -39,13 +39,45 @@
 <!--end NAV-->
 
 <div class="container">
-	<ul>
-<<<<<<< HEAD
-		<li th:each="sales : ${allSales.keySet()}"><a th:href="@{/admin/monthlysalesoverview(month=${sales})}"><h5 th:text="${sales} + '  : '"> </h5></a><label th:text="'&euro; ' +${allSales.get(sales)}"></label></li>
-=======
-		<li th:each="sales : ${allSales.keySet()}"><h5 th:text="${sales} + '  : '"> </h5><label th:text="'&euro; ' +${allSales.get(sales)}"></label></li>
->>>>>>> branch 'master' of https://github.com/abdulhadi1986/phoneplaats.git
-	</ul>
+	<p><h3 th:text="'Sales for the month : ' + ${month}"></h3></p>
+	<table class="table">
+			<thead>
+				<tr>
+					<th scope="col" class="product_name">
+						Order No.
+					</th>
+					<th scope="col" class="product_name">
+						Order Date
+					</th>
+					<th scope="col" class="product_name">
+						Article
+					</th>
+					<th scope="col" class="product_name">
+						Quantity
+					</th>
+					<th scope="col" class="product_name">
+						Price 
+					</th>
+					<th scope="col" class="product_name">
+						Order Total
+					</th>
+				</tr>
+			</thead>
+			<tbody id="tableBody">
+				<tr th:each="order : ${allOrders}">					
+					<th scope="row" class="border-0">
+						<div class="p-2">
+							<h4 th:text="${order.getOrder().getFunctionalId()}"></h4>
+						</div>
+					</th>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getOrder().getOrderDate()}"><strong>price</strong></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getProduct().getProductName()}"><strong>price</strong></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getQuantity()}"><strong>price</strong></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="' &euro; '+${#numbers.formatDecimal(order.getProduct().getProductPrice(), 0, 'POINT', 2, 'COMMA')}"><strong>price</strong></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getOrder().getOrderTotal()}"><strong>price</strong></td>
+				</tr>
+			</tbody>
+		</table>
 	
 </div>
 </br></br>
