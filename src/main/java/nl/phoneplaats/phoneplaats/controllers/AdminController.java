@@ -37,6 +37,7 @@ import nl.phoneplaats.phoneplaats.services.AdminServices;
 @Transactional
 @Controller
 public class AdminController {
+	//this is just a comment from iMac
 	@Autowired
 	private ProductRepo productRepo;
 	
