@@ -33,3 +33,8 @@ build/
 
 ### log files ###
 phoneplaatslogs/
+
+### mac os files ###
+.DS_Store
+.AppleDouble
+.LSOverride
