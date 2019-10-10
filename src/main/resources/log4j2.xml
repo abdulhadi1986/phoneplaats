@@ -8,12 +8,21 @@
             <PatternLayout>
                 <Pattern>%d %p %c{1.} [%t] %m%n</Pattern>
             </PatternLayout>
+            <MaxFileSize>100MB</MaxFileSize>
+            <MaxBackupIndex>2</MaxBackupIndex>
         </File>
+
+        <!-- <Appender name="LogToFile" class="org.apache.log4j.RollingFileAppender">
+            <param name="File" value="phoneplaatslogs/app.log"/>
+            <param name="Threshold" value="DEBUG"/>
+            <layout class="org.apache.log4j.PatternLayout">
+                <param name="ConversionPattern" value="%d{ABSOLUTE} %-5p [%c{1}] %m%n"/>
+            </layout>
+        </Appender> -->
 	</Appenders>
     <Loggers>
         <Root level="info">
             <AppenderRef ref="Console"/>
-            <AppenderRef ref="LogToFile"/>
         </Root>
     <logger name="org.springframework" level="error" additivity="false">
         <appender-ref ref="LogToFile"/>

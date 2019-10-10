@@ -285,7 +285,8 @@
                     
                     <!--shop toolbar end-->
                     <div class="row shop_wrapper">
-                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}">
+                        <!-- Products in sale  -->
+                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductSalePrice() > 0}">
                             <article class="single_product">
                                 <figure>
                                     <div class="product_name">
@@ -315,6 +316,38 @@
                                         <div class="price_box"> 
                                             <span class="old_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductPrice(), 0, 'POINT', 2, 'COMMA')}"></span> 
                                             <span class="current_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductSalePrice(), 0, 'POINT', 2, 'COMMA')}"></span>
+                                        </div>
+                                    </div>
+                                </figure>
+                            </article>
+                        </div>
+                        <!-- Not in sales products -->
+                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductSalePrice() == 0}">
+                            <article class="single_product">
+                                <figure>
+                                    <div class="product_name">
+                                       <a th:href="@{/productDetails(prodId=${product.getProductId()})}"><h4 th:text="${product.getProductName()}"></h4></a>
+                                    </div>
+                                   <div class="product_rating">
+                                       <ul>
+                                           <li>Product conditie: </li>
+                                           <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                           <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                           <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                           <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                           <li><a href="#"><i class="fa fa-star" aria-hidden="true"></i></a></li>
+                                       </ul>
+                                   </div>
+                                    <div class="product_thumb">
+                                        <a class="primary_img" th:href="@{/productDetails(prodId=${product.getProductId()})}">
+                                            <img style="width:180px; height:350px;" th:src="${product.getProductImages().get(0).getImageUri()}" alt=""></a>
+                                        <div class="quick_button">
+                                            <a th:href="@{/productDetails(prodId=${product.getProductId()})}" title="naar details"> Snel bekijken</a>
+                                        </div>
+                                    </div>
+                                    <div class="product_footer product_content grid_content">
+                                        <div class="price_box"> 
+                                           <span class="current_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductPrice(), 0, 'POINT', 2, 'COMMA')}"></span>
                                         </div>
                                     </div>
                                 </figure>

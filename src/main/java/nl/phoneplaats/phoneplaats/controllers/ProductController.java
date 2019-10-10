@@ -5,10 +5,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.mail.MessagingException;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.error.ErrorController;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -22,7 +26,7 @@ import nl.phoneplaats.phoneplaats.services.GeneralServices;
 import nl.phoneplaats.phoneplaats.services.ProductServices;
 
 @Controller
-public class ProductController {
+public class ProductController implements ErrorController{
 	
 	@Autowired
 	private InventoryDao inventoryDao;
@@ -36,6 +40,7 @@ public class ProductController {
 	private EmailServices emailService;
 	
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
+	private static final String ERROR_PATH = "/error";
 	
 	@RequestMapping(value= {"/","/home","/products","/index"}, method=RequestMethod.GET)
 	public String getAllProducts(Model model 
@@ -51,6 +56,7 @@ public class ProductController {
 		}
 		
 		model.addAttribute("allProducts", allProducts);
+		logger.debug("new visitor to the home page");
 		
 		return "home";
 	}
@@ -97,6 +103,25 @@ public class ProductController {
 			return "redirect:/contact?message=messinginfo";
 		EmailServices.sendEmailFromContactPage(name, email, subject, message);
 		return "redirect:/contact?message=sent";
+	}
+	
+	@RequestMapping(ERROR_PATH)
+	public String errorHandler(HttpServletRequest request) {
+		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+		if (status != null) {
+			Integer statusCode = Integer.valueOf(status.toString()); 
+			logger.debug("Error Code: " + HttpStatus.NOT_FOUND.value());
+			if (statusCode == HttpStatus.NOT_FOUND.value()) {
+				return "404-error";
+			}
+		}
+		
+		return "error";
+	}
+
+	@Override
+	public String getErrorPath() {		
+		return ERROR_PATH;
 	}
 	
 }

@@ -8,6 +8,6 @@ import nl.phoneplaats.phoneplaats.dto.OrderDetail;
 
 public interface OrderDetailRepo extends JpaRepository<OrderDetail, Integer> {
 	public OrderDetail findById(int id);
-	//public List<OrderDetail> findByOrderId(int id);
+	public List<OrderDetail> findByOrderOrderId(int id);
 
 }

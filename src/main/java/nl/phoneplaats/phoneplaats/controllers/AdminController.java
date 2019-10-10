@@ -32,6 +32,7 @@ import nl.phoneplaats.phoneplaats.dto.ProductImage;
 import nl.phoneplaats.phoneplaats.repo.CategoryRepo;
 import nl.phoneplaats.phoneplaats.repo.ImageRepo;
 import nl.phoneplaats.phoneplaats.repo.InventoryRepo;
+import nl.phoneplaats.phoneplaats.repo.OrderDetailRepo;
 import nl.phoneplaats.phoneplaats.repo.ProductRepo;
 import nl.phoneplaats.phoneplaats.services.AdminServices;
 
@@ -53,6 +54,9 @@ public class AdminController {
 	
 	@Autowired
 	private AdminServices adminServices;
+	
+	@Autowired
+	private OrderDetailRepo orderDetailRepo;
 	
 	private static Map<String, List<Order>> salesOverview = new HashMap<>();
 	
@@ -246,7 +250,7 @@ public class AdminController {
 		
 		List <OrderDetail> allOrders = new ArrayList<>();
 		for (Order order : salesOverview.get(month)) {
-			allOrders.addAll(order.getOrderDetails());
+			allOrders.addAll(orderDetailRepo.findByOrderOrderId(order.getOrderId()));
 		}
 		model.addAttribute("month", month);
 		model.addAttribute("allOrders", allOrders);
