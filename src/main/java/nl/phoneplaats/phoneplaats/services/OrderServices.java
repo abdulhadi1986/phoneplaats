@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +25,7 @@ public class OrderServices {
 	@Autowired
 	OrderRepo orderRepo; 
 	
+	private static final Logger logger = LoggerFactory.getLogger(OrderServices.class);
 	/**
 	 * sets customer info in the database and assigns them to the order 	
 	 * @param order
@@ -33,8 +36,11 @@ public class OrderServices {
 		customer.setEmail(customer.getEmail().replace(";", ""));
 		Customer savedCustomer = customerRepo.findByEmail(customer.getEmail());
 		if(savedCustomer == null) {
+			logger.debug("saving the new customer to the DB : " + customer);
 			customerRepo.save(customer);
 			savedCustomer = customerRepo.findByEmail(customer.getEmail());
+		}else {
+			logger.debug("returning customer : " + customer);
 		}
 
 		order.setCustomer(savedCustomer);	
@@ -96,6 +102,7 @@ public class OrderServices {
 				+"-"
 				+rand ;
 		order.setFunctionalId(fId);
+		logger.debug("setting order funcID: " + fId);
 		
 	}
 	
@@ -115,6 +122,7 @@ public class OrderServices {
 		order.setOrderDate(LocalDateTime.now());
 		
 		//save order to database 
+		logger.debug("saving order with status OPEN");
 		orderRepo.save(order);
 		int orderId = orderRepo.findByFunctionalId(order.getFunctionalId()).getOrderId();
 		order.setOrderId(orderId);
@@ -122,11 +130,14 @@ public class OrderServices {
 	}
 	
 	public void setOrderTotal(Order order, List<OrderDetail> orderItems) {
+		logger.debug("setting order total : "+ orderItems);
 		double subTotal=0;
 		for(OrderDetail orderDetail: orderItems) {
+			logger.debug("subtotal now: " + subTotal);
 			subTotal += orderDetail.getProduct().getProductPrice()*orderDetail.getQuantity();
 		}
 		order.setOrderTotal(Math.round(subTotal*100d)/100d);
+		logger.debug("Order total : " + order.getOrderTotal());
 		
 		
 	}

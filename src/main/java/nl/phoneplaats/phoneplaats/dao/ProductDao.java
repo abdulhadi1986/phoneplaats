@@ -1,14 +1,9 @@
 package nl.phoneplaats.phoneplaats.dao;
 
-import java.util.List;
-
-import javax.persistence.EntityManager;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import nl.phoneplaats.phoneplaats.dto.Product;
-import nl.phoneplaats.phoneplaats.dto.ProductImage;
 import nl.phoneplaats.phoneplaats.repo.ImageRepo;
 import nl.phoneplaats.phoneplaats.repo.ProductRepo;
 
@@ -18,8 +13,6 @@ public class ProductDao {
 	private ProductRepo productRepo;
 	@Autowired
 	private ImageRepo imageRepo;
-	@Autowired
-	private EntityManager entityManager;
 	
 	
 	  public void setProductImages(Product product){

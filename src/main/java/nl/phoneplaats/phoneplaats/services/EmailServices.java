@@ -12,6 +12,8 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeBodyPart;
 import javax.mail.internet.MimeMultipart;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.sun.mail.smtp.SMTPMessage;
@@ -21,6 +23,7 @@ import nl.phoneplaats.phoneplaats.dto.OrderDetail;
 
 @Service
 public class EmailServices {
+	private static final Logger logger = LoggerFactory.getLogger(EmailServices.class);
 	
 	public static void sendOrderToSeller(Order order) throws MessagingException {
 		Session session = buildGoogleSession();
@@ -122,16 +125,18 @@ public class EmailServices {
 		    SMTPMessage m = new SMTPMessage(session);
 		    MimeMultipart content = new MimeMultipart("related");
 		    
-		    // ContentID is used by both parts
-		    String cid = String.valueOf(((Math.round(Math.random() * 100d) / 100d)*100));
+		    
+		    
 		    
 		    // HTML part
 		    MimeBodyPart textPart = new MimeBodyPart();
 		    textPart.setText(emailBody,"US-ASCII", "html");
 		    content.addBodyPart(textPart);
 
-		    // Image part
+		// Image part
+		// ContentID is used by both parts
 		/*
+		 * String cid = String.valueOf(((Math.round(Math.random() * 100d) / 100d)*100));
 		 * MimeBodyPart imagePart = new MimeBodyPart();
 		 * imagePart.attachFile("img/logo-sm.png"); imagePart.setContentID("<" + cid +
 		 * ">"); imagePart.setDisposition(MimeBodyPart.INLINE);
@@ -185,7 +190,8 @@ public class EmailServices {
 		}
 	  
 	  public static void sendEmailFromContactPage(String senderName, String senderEmail, String subject, String message) {
-			Session session = buildGoogleSession();
+			logger.debug("sending message from Contact Us Page " + senderEmail + " " + subject);
+		  	Session session = buildGoogleSession();
 			String emailTitle = "New message from phoneplaats.nl with subject: - "+subject;
 			
 			String emailBody = "from: "+senderName +"\n"+ 
@@ -198,10 +204,25 @@ public class EmailServices {
 				simpleMessage = buildSimpleMessage(session, emailTitle,emailBody);
 				sendMessageToAddress(simpleMessage, "abedscorpion@gmail.com");
 			} catch (MessagingException e) {
-				
+				logger.debug("error sending message from Contact Us page " + e.getMessage());
 				e.printStackTrace();
 			}
 			
+		  
+	  }
+	  
+	  public static void sendEmailForConfirmationFailure(Order order) {
+		  Session session = buildGoogleSession();
+		  String emailTitle = "Please check the order " + order.getFunctionalId() ;
+		  String emailBody = "The payment was successfull but the client received no confirmation please check the database for more info";
+		  Message simpleMessage;
+		  try {
+				simpleMessage = buildSimpleMessage(session, emailTitle, emailBody);
+				sendMessageToAddress(simpleMessage, "abedscorpion@gmail.com");
+		  }catch (MessagingException e) {
+				logger.debug("error sending message with failure confirmation" + e.getMessage());
+				e.printStackTrace();
+		  }
 		  
 	  }
 }

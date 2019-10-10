@@ -8,11 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import nl.phoneplaats.phoneplaats.dto.Order;
-import nl.phoneplaats.phoneplaats.dto.OrderDetail;
 import nl.phoneplaats.phoneplaats.dto.Product;
 import nl.phoneplaats.phoneplaats.repo.InventoryRepo;
 

@@ -69,8 +69,7 @@ public class ShoppingcartController {
 		
 	@RequestMapping(value="/shoppingcart", method=RequestMethod.GET)
 	public String getShoppingCartPage(Model model, HttpSession session) {
-		logger.debug("Getting ShoppingCart");
-		logger.info("info Getting shoppingcart");
+		
 		Order order = (Order) session.getAttribute("order");
 		if (order == null || order.getOrderDetails()==null) {
 			return "redirect:/products";
@@ -85,7 +84,7 @@ public class ShoppingcartController {
 		model.addAttribute("orderSubtotal", order.getOrderTotal());
 		model.addAttribute("shippingCost", 0);
 		model.addAttribute("total", order.getOrderTotal());
-		
+		logger.debug("Getting ShoppingCart" + shoppingCartItems);
 		return "shoppingcart";
 	}
 
@@ -96,6 +95,7 @@ public class ShoppingcartController {
 		shoppingCartItems = order.getOrderDetails()!=null?order.getOrderDetails():new ArrayList<>();
 		//check if the ordered quantity is correct
 		if (quantity <=0 && quantity > inventoryDao.getProductInventory(product)) {
+			logger.debug("the user entered invalid quantity while it is not allowed : " + quantity + " ,available qty: "+inventoryDao.getProductInventory(product) );
 			return "redirect:productDetails?prodId="+product.getProductId()+"&error=1";
 		}
 		
@@ -135,7 +135,9 @@ public class ShoppingcartController {
 	
 	  @RequestMapping(value="/addProductsToOrder", method=RequestMethod.POST)
 	  public String addProductsToOrder(@ModelAttribute Order order, HttpSession session) { 
+		  logger.debug("adding product to order" + order.getOrderDetails());
 		  if (order.getOrderDetails().size()==0) {
+			  logger.debug("No product to be added ");
 			  return "redirect:shoppingcart";
 		  }
 		  this.order.setOrderDetails(order.getOrderDetails());
@@ -149,6 +151,7 @@ public class ShoppingcartController {
 	  public String checkout(Model model
 			  		, HttpSession session
 			  		,@RequestParam(value="error", required=false, defaultValue="")String error) {
+		
 		Order order = (Order) session.getAttribute("order");
 		generalServices.setPageHeader(model, session);
 		if (order.getOrderDetails().size()==0) {
@@ -209,6 +212,7 @@ public class ShoppingcartController {
 			orderServices.perpareOrderForPayment(order);
 			
 		}catch (Exception e) {
+			logger.error("Error preparing order "+ e.getMessage());
 			return "redirect:shippingInfo?error=OtherError";
 		}
 		
@@ -217,8 +221,12 @@ public class ShoppingcartController {
 		try {
 			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order);
 		}catch (MollieException e) {
+			logger.error("Error creating payament" + e.getMessage());
+			orderRepo.deleteByOrderId(order.getOrderId());
 			return "redirect:shippingInfo?error=PaymentServerError";
 		}catch (Exception e) {
+			logger.error("Error creating payament" + e.getMessage());
+			orderRepo.deleteByOrderId(order.getOrderId());
 			return "redirect:shippingInfo?error=OtherError";
 		}	
 		
@@ -235,6 +243,7 @@ public class ShoppingcartController {
 	public String getConfirmation(@RequestParam(name="orderId", required=true)String orderId
 									, Model model
 									,HttpSession session) {
+		
 		Order order = orderRepo.findByFunctionalId(orderId);
 		generalServices.setPageHeader(model, session);
 		boolean isPaymentSuccessful=false;
@@ -242,21 +251,26 @@ public class ShoppingcartController {
 		try {
 			if(paymentServices.isPaymentCompleted(order)) {
 				isPaymentSuccessful = true;
+				logger.debug("payment is successfull" + order.getPaymentId());
 				session.removeAttribute("order");
 				
 			}
 		} catch (MollieException e) {
+			logger.error("Error getting payament info" + order.getFunctionalId() + " , " + order.getPaymentId());
+			EmailServices.sendEmailForConfirmationFailure(order);
 			e.printStackTrace();
 			
 		}
-		if (!isPaymentSuccessful)
+		if (!isPaymentSuccessful) {
+			logger.debug("payment with id " + order.getPaymentId() + " was not successfull");
 			return "redirect:shippingInfo?error=PaymentError";
+		}
 	
 		try {
 			EmailServices.sendOrderConfirmationToCustomer(order);
 			EmailServices.sendOrderToSeller(order);			
 		} catch (MessagingException e) {
-			logger.error("error happened while sending email for confirmation");
+			logger.error("ERROR happened while sending email for confirmation");
 			e.printStackTrace();
 		} catch (IOException e) {
 			logger.error("ERROR happened while sending email");

@@ -4,12 +4,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import be.feelio.mollie.Client;
-import be.feelio.mollie.ClientBuilder;
-import be.feelio.mollie.data.payment.PaymentRequest;
 import nl.phoneplaats.phoneplaats.dao.ProductDao;
 import nl.phoneplaats.phoneplaats.dto.Category;
 import nl.phoneplaats.phoneplaats.dto.Product;
@@ -31,6 +29,8 @@ public class ProductServices {
 	
 	@Autowired
 	private ProductRepo productRepo;
+	
+	private static final Logger logger = LoggerFactory.getLogger(ProductServices.class);
 	
 	public Product setProductInfo(int productId) {
 		Product product = new Product();
@@ -62,6 +62,7 @@ public class ProductServices {
 	 * @return
 	 */
 	public String[] getFormattedSpec(Product product) {
+		logger.debug("getting product formatted descritpion" + product.getProductDescription().split(";"));
 		return product.getProductDescription().split(";");
 	}
 }

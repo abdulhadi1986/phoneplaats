@@ -8,5 +8,6 @@ import nl.phoneplaats.phoneplaats.dto.Order;
 public interface OrderRepo extends JpaRepository<Order, Integer> {
 	public Order findByOrderId(int id);
 	public Order findByFunctionalId(String functionalId);
+	public void deleteByOrderId(int id);
 
 }

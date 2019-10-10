@@ -1,10 +1,7 @@
 package nl.phoneplaats.phoneplaats.controllers;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.mail.MessagingException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -36,8 +33,7 @@ public class ProductController implements ErrorController{
 	private ProductServices productServices;
 	@Autowired
 	private GeneralServices generalServices;
-	@Autowired
-	private EmailServices emailService;
+
 	
 	private static Logger logger = LoggerFactory.getLogger(ProductController.class);
 	private static final String ERROR_PATH = "/error";
@@ -55,8 +51,7 @@ public class ProductController implements ErrorController{
 			allProducts.add(product);
 		}
 		
-		model.addAttribute("allProducts", allProducts);
-		logger.debug("new visitor to the home page");
+		model.addAttribute("allProducts", allProducts);		
 		
 		return "home";
 	}
@@ -67,15 +62,16 @@ public class ProductController implements ErrorController{
 												,HttpSession session) {
 			
 		generalServices.setPageHeader(model, session);
-			Product product = productServices.setProductInfo(prodId);
-			model.addAttribute("product", product);
-			if(error == 1) {
-				model.addAttribute("quantityerror", "Het aantal beschikbare artikelen op dit moment is("
-						+ inventoryDao.getProductInventory(product)+")");	
-			}
-			logger.debug("product images: " + product.getProductImages());
+		Product product = productServices.setProductInfo(prodId);
+		model.addAttribute("product", product);
+		logger.debug("getting product details: "+ product.getProductName());
+		if(error == 1) {
+			model.addAttribute("quantityerror", "Het aantal beschikbare artikelen op dit moment is("
+					+ inventoryDao.getProductInventory(product)+")");
 			
-			model.addAttribute("formattedSpec", productServices.getFormattedSpec(product));
+		}
+				
+		model.addAttribute("formattedSpec", productServices.getFormattedSpec(product));
 						
 		return "productDetails";
 	}
@@ -88,6 +84,7 @@ public class ProductController implements ErrorController{
 		if (message.contentEquals("sent")) {
 			messageParam= "Uw message is verzonden. U krijgt een reactie van ons z.s.m.";
 		}else if (message.equals("messinginfo")) {
+			logger.debug("sedning messge from contact us page failed because of empty fields");
 			errorMessage= "Alle velden moet ingevuld worden!";
 		}
 		

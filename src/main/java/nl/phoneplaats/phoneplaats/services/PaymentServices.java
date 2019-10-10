@@ -2,21 +2,17 @@ package nl.phoneplaats.phoneplaats.services;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import be.feelio.mollie.Client;
 import be.feelio.mollie.ClientBuilder;
 import be.feelio.mollie.data.common.Amount;
 import be.feelio.mollie.data.common.Locale;
-import be.feelio.mollie.data.payment.PaymentMethod;
 import be.feelio.mollie.data.payment.PaymentRequest;
 import be.feelio.mollie.data.payment.PaymentResponse;
 import be.feelio.mollie.exception.MollieException;
-import be.feelio.mollie.handler.PaymentHandler;
 import nl.phoneplaats.phoneplaats.dto.Order;
 import nl.phoneplaats.phoneplaats.repo.OrderRepo;
 
@@ -38,7 +34,7 @@ public class PaymentServices {
 		PaymentRequest paymentRequest = PaymentRequest.builder()
                 .amount(Amount.builder()
                         .currency("EUR")//String.valueOf(Math.round(orderTotal*100d)/100d)
-                        .value("2.00")
+                        .value(String.valueOf(Math.round(orderTotal*100d)/100d))
                         .build())
                 .description(order.getFunctionalId())
                 .redirectUrl(Optional.of("http://localhost:8081/confirmation"+"?orderId="+order.getFunctionalId()))
@@ -50,9 +46,14 @@ public class PaymentServices {
 			logger.debug("payment request is creaeted");
 			//epaymentRequest.setProfileId(Optional.of("pfl_DPxajhSzEr"));
 			PaymentResponse paymentResponse = client.payments().createPayment(paymentRequest);
+			
 			order.setStatus(paymentResponse.getStatus());
+			logger.debug("payment status for the order: "+ order.getStatus());
+			
 			order.setPaymentId(paymentResponse.getId());
+			logger.debug("payment id for the order : " + order + " , " + order.getPaymentId());
 			order.setOrderDate(LocalDateTime.now());
+			logger.debug("saving order to DB ..");
 			orderRepo.save(order);
 
 			logger.debug("the payment : " + paymentResponse.getStatus() + " " +paymentResponse.getAmount()+" "+paymentResponse.getLinks().getStatus());
@@ -67,6 +68,7 @@ public class PaymentServices {
 	            .withTestMode(true)
 	            .withOrganizationToken("access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv")
 	            .build();
+		
 		logger.debug("checking the payment with id: "+order.getPaymentId());
 		PaymentResponse paymentResponse = client.payments().getPayment(order.getPaymentId());
 		logger.debug("payment status : "+paymentResponse.getStatus());

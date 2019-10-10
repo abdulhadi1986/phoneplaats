@@ -14,8 +14,6 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import nl.phoneplaats.phoneplaats.services.ProductServices;
-
 @Entity
 @Table(name="products")
 public class Product {

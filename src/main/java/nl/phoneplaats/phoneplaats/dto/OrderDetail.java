@@ -79,5 +79,11 @@ public class OrderDetail {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "OrderDetail [product=" + product + ", quantity=" + quantity + "]";
+	}
+	
+	
 
 }

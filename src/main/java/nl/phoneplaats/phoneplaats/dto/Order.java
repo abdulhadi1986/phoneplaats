@@ -3,8 +3,6 @@ package nl.phoneplaats.phoneplaats.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Set;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -161,9 +159,10 @@ public class Order {
 
 	@Override
 	public String toString() {
-		return "Order [" + functionalId + "]";
+		return "Order [functionalId=" + functionalId + ", orderTotal=" + orderTotal + ", status=" + status + "]";
 	}
 
+	
 	
 	
 
