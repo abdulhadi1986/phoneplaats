@@ -15,10 +15,10 @@
 
 
     <!-- Plugins CSS -->
-    <link rel="stylesheet" href="/css/plugins.css">
+    <link rel="stylesheet" th:href="@{/css/plugins.css}">
     
     <!-- Main Style CSS -->
-    <link rel="stylesheet" href="/css/style.css">
+    <link rel="stylesheet" th:href="@{/css/style.css}">
 
 </head>
 
@@ -68,7 +68,6 @@
                                 <input type="password" name="password">
                              </p>   
                             <div class="login_submit">
-                               <a href="#">Lost your password?</a>
                                 <label for="remember">
                                     <input id="remember" type="checkbox">
                                     Remember me
@@ -93,7 +92,7 @@
                 <div class="row align-items-center">
                     <div class="col-lg-6 col-md-6">
                         <div class="copyright_area">
-                            <p>Copyright &copy; 2019 <a href="#">Rusu</a>  All Right Reserved.</p>
+                            <p>Copyright &copy; 2019 <a href="#">PhonePlaats.NL</a>  All Right Reserved.</p>
                         </div>
                     </div>
                     <div class="col-lg-6 col-md-6">
@@ -116,10 +115,10 @@
 ============================================ -->
 
 <!-- Plugins JS -->
-<script src="/js/plugins.js"></script>
+<script th:src="@{/js/plugins.js}"></script>
 
 <!-- Main JS -->
-<script src="/js/main.js"></script>
+<script th:src="@{/js/main.js}"></script>
 
 
 

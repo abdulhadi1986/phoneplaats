@@ -1,0 +1,83 @@
+    <header th:fragment="header">
+        <div class="main_header common_header">
+            <!--header top start-->
+            <div class="header_top">
+                <div class="container">  
+                    <div class="row align-items-center">
+                        <div class="col-lg-4 col-md-4">
+                            
+                        </div>
+                        <div class="col-lg-8 col-md-9">
+                            <div class="top_right text-right">
+                                <div class="header_support">
+                                    <p><i class="icon ion-android-alarm-clock"></i> Voor 23:30 bestled, morgen bezorgd! - Support: <a href="tel:+(012)800456789">(012) 800 456 789 </a></p>
+                                </div>
+                            </div>   
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--header top start-->
+            <!--header middel start-->
+            <div class="header_middle sticky-header">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-lg-3 col-md-6">
+                            <div >
+                                <a th:href="@{/home}"><img src="img/logo-sm.png" alt="" style="width:260px; height:41px;"></a>
+                            </div>
+                        </div>
+                        <div class="col-lg-9 col-md-12">
+                            <div class="main_menu menu_position text-right"> 
+                                <nav>  
+                                    <ul>
+                                        <li><a  th:href="@{/home}">home</a>
+                                            
+                                        </li>
+                                        <li class="mega_items"><a class="active" th:href="@{/products}">Producten<i class="fa fa-angle-down"></i></a> 
+                                            <div class="mega_menu">
+                                                <ul class="mega_menu_inner">
+                                                    <li th:each="category : ${categoryMap.keySet()}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}">
+                                                        <span th:text="${category.getCategoryName()}"></span></a>
+                                                        <ul th:if="${categoryMap.get(category)!=null}">
+                                                            <li th:each="product: ${categoryMap.get(category)}">
+                                                                <a th:href="@{/productDetails(prodId=${product.getProductId()})}">
+                                                                    <span th:text="${product.getProductName()}"></span>
+                                                                </a>
+                                                            </li>
+                                                        </ul>
+                                                    </li>                                                                                                     
+                                                </ul>
+                                            </div>
+                                        </li>
+                                        <li><a th:href="@{/overons}">Over ons</i></a></li>
+                                        <li><a th:href="@{/contact}"> Contact</a></li>
+                                        <li>
+                                            <div class="mini_cart_wrapper">
+                                            <a th:href="@{/shoppingcart}">
+                                               <span class="cart_icon">
+                                                   <i class="ion-android-cart"></i>
+                                               </span>
+                                               <span class="cart_title" th:if="${shoppingItemsCount>0}">
+                                                    <span class="cart_quantity" th:text="${shoppingItemsCount}+ ' item(s)'"></span>
+                                                    <span class="cart_price" th:text="'&euro;'+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
+                                                </span>
+                                                <span class="cart_title" th:if="${shoppingItemsCount==0}">
+                                                        <span class="cart_quantity">0 artikelen</span>                                                        
+                                                </span>
+                                            </a>
+                                            <!--mini cart end-->
+                                            </div>
+                                        </li>
+                                    </ul>  
+                                </nav> 
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+            <!--header middel end-->
+            
+        </div> 
+    </header>

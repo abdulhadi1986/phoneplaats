@@ -1,0 +1,74 @@
+<div class="Offcanvas_menu" th:fragment="Offcanvas_menu">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="canvas_open" style="border-color:blue;">
+                        Menu<a href="javascript:void(0)"><i class="ion-navicon" style="border-color:blue;"></i></a>
+                    </div>
+                    <div class="Offcanvas_menu_wrapper">
+                        <div class="canvas_close">
+                              <a href="javascript:void(0)"><i class="ion-android-close"></i></a>  
+                        </div>
+                        <div class="header_support">
+                            <p><i class="icon ion-android-alarm-clock"></i> Voor 23:30 bestled, morgen bezorgd! - Support: <a href="tel:+(012)800456789">(012) 800 456 789 </a></p>
+                        </div>
+                        <div id="menu" class="text-left ">
+                            <ul class="offcanvas_main_menu">
+                                <li class="menu-item-has-children"><a  th:href="@{/home}">home</a>
+                                <li class="menu-item-has-children"><a th:href="@{/products}">Producten</a> 
+                                    <ul class="sub-menu">
+                                        <li class="menu-item-has-children" th:each="category : ${categoryMap.keySet()}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}">
+                                            <span th:text="${category.getCategoryName()}"></span></a>
+                                            <ul class="sub-menu" th:if="${categoryMap.get(category)!=null}">
+                                                <li th:each="product: ${categoryMap.get(category)}">
+                                                    <a th:href="@{/productDetails(prodId=${product.getProductId()})}">
+                                                        <span th:text="${product.getProductName()}"></span>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>                                                                                                     
+                                    </ul>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a th:href="@{/overons}">Over ons</i></a>
+                                </li>
+                                <li class="menu-item-has-children">
+                                    <a th:href="@{/contact}"> Contact</a>
+                                </li>
+                                <li>
+                                    
+                                </li>
+                                
+                            </ul>
+                        </div>
+                        <div class="Offcanvas_footer">
+                            <div class="mini_cart_wrapper">
+                                <a th:href="@{/shoppingcart}">
+                                   <span class="cart_icon">
+                                       <i class="ion-android-cart"></i>
+                                   </span>
+                                   <span class="cart_title" th:if="${shoppingItemsCount>0}">
+                                        <span class="cart_quantity" th:text="${shoppingItemsCount}+ ' item(s)'"></span>
+                                        <span class="cart_price" th:text="' &euro; '+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
+                                    </span>
+                                    <span class="cart_title" th:if="${shoppingItemsCount==0}">
+                                            <span class="cart_quantity">0 artikelen</span>                                                        
+                                    </span>
+                                </a>
+                                <!--mini cart end-->
+                                </div>
+                            <span><a href="#"><i class="fa fa-envelope-o"></i> info@phoneplaats.nl</a></span>
+                            <ul>
+                                <li class="facebook"><a href="#"><i class="fa fa-facebook"></i></a></li>
+                                <li class="twitter"><a href="#"><i class="fa fa-twitter"></i></a></li>
+                                <li class="pinterest"><a href="#"><i class="fa fa-pinterest-p"></i></a></li>
+                                <li class="google-plus"><a href="#"><i class="fa fa-google-plus"></i></a></li>
+                                <li class="linkedin"><a href="#"><i class="fa fa-linkedin"></i></a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--Offcanvas menu area end-->
