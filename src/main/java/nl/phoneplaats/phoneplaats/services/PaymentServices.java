@@ -30,7 +30,7 @@ public class PaymentServices {
 	            .withTestMode(true)
 	            .build();
 
-		logger.debug("client for payment is created");
+		logger.debug("client for payment is created, now creating payment, amount : "+String.valueOf(Math.round(orderTotal*100d)/100d));
 		PaymentRequest paymentRequest = PaymentRequest.builder()
                 .amount(Amount.builder()
                         .currency("EUR")//String.valueOf(Math.round(orderTotal*100d)/100d)

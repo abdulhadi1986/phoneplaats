@@ -35,8 +35,7 @@ public class GeneralServices {
 			shoppingItemsCount =order.getOrderDetails().size();
 			total = order.getOrderTotal();
 			
-		}
-		logger.debug("Order in the session: " + order);
+		}		
 		model.addAttribute("shoppingItemsCount",shoppingItemsCount);
 		model.addAttribute("orderTotal", total);	
 		

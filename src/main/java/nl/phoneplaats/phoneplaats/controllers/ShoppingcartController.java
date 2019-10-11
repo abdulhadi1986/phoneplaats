@@ -7,6 +7,7 @@ import javax.mail.MessagingException;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -192,7 +193,7 @@ public class ShoppingcartController {
 	  return"shippinginfo"; 
 	  }	 
 	
-	
+	@Transactional
 	@RequestMapping(value="/checkout" , method=RequestMethod.POST)
 	public String doCheckout(@ModelAttribute Customer customer
 							, HttpSession session
@@ -222,10 +223,14 @@ public class ShoppingcartController {
 			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order);
 		}catch (MollieException e) {
 			logger.error("Error creating payament" + e.getMessage());
+			e.printStackTrace();
+			logger.debug("deleting order " + order.getFunctionalId());
 			orderRepo.deleteByOrderId(order.getOrderId());
 			return "redirect:shippingInfo?error=PaymentServerError";
 		}catch (Exception e) {
-			logger.error("Error creating payament" + e.getMessage());
+			logger.error("another Error creating payament" + e.getMessage());
+			e.printStackTrace();
+			logger.debug("deleting order " + order.getFunctionalId());
 			orderRepo.deleteByOrderId(order.getOrderId());
 			return "redirect:shippingInfo?error=OtherError";
 		}	
@@ -252,6 +257,7 @@ public class ShoppingcartController {
 			if(paymentServices.isPaymentCompleted(order)) {
 				isPaymentSuccessful = true;
 				logger.debug("payment is successfull" + order.getPaymentId());
+				logger.debug("clearing user's session");
 				session.removeAttribute("order");
 				
 			}

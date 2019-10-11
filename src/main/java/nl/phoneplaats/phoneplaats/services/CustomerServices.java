@@ -20,7 +20,7 @@ public class CustomerServices {
 			logger.debug("personal info are not valid : " + customer);
 			return false;
 		}
-		if (customer.getEmail().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")) {
+		if (!customer.getEmail().matches("^[\\w-_\\.+]*[\\w-_\\.]\\@([\\w]+\\.)+[\\w]+[\\w]$")) {
 			logger.debug("Invalid email address : "+ customer.getEmail());
 			return false;
 		}

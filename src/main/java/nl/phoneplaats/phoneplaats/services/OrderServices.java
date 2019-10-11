@@ -130,14 +130,13 @@ public class OrderServices {
 	}
 	
 	public void setOrderTotal(Order order, List<OrderDetail> orderItems) {
-		logger.debug("setting order total : "+ orderItems);
-		double subTotal=0;
-		for(OrderDetail orderDetail: orderItems) {
-			logger.debug("subtotal now: " + subTotal);
+		double subTotal=0.001d;
+		for(OrderDetail orderDetail: orderItems) {			
 			subTotal += orderDetail.getProduct().getProductPrice()*orderDetail.getQuantity();
 		}
-		order.setOrderTotal(Math.round(subTotal*100d)/100d);
-		logger.debug("Order total : " + order.getOrderTotal());
+		order.setOrderTotal(Math.round(subTotal*100.00d)/100.00d);
+		logger.debug("order total: " + order.getOrderTotal());
+		
 		
 		
 	}

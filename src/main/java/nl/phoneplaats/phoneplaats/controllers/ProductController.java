@@ -103,11 +103,12 @@ public class ProductController implements ErrorController{
 	}
 	
 	@RequestMapping(ERROR_PATH)
-	public String errorHandler(HttpServletRequest request) {
+	public String errorHandler(HttpServletRequest request, Model model, HttpSession session) {
 		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
 		if (status != null) {
+			generalServices.setPageHeader(model, session);
 			Integer statusCode = Integer.valueOf(status.toString()); 
-			logger.debug("Error Code: " + HttpStatus.NOT_FOUND.value());
+			logger.debug("Error Code: " + HttpStatus.NOT_FOUND.value() + " , the catched code : "+ statusCode);
 			if (statusCode == HttpStatus.NOT_FOUND.value()) {
 				return "404-error";
 			}

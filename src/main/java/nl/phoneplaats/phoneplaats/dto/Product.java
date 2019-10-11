@@ -188,5 +188,10 @@ public class Product {
 	public void setPackageHeight(Double packageHeight) {
 		this.packageHeight = packageHeight;
 	}
+	@Override
+	public String toString() {
+		return "Product [productName=" + productName + "]";
+	}
+	
 	
 }
