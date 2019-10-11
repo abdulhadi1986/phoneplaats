@@ -1,5 +1,6 @@
 package nl.phoneplaats.phoneplaats.services;
 
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Optional;
 import org.slf4j.Logger;
@@ -25,16 +26,20 @@ public class PaymentServices {
 	//profile id : pfl_DPxajhSzEr
 	//access token: access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv
 	public String createPayment(double orderTotal, Order order) throws MollieException {
+		
+		DecimalFormat f = new DecimalFormat("##.00");
+		
 		Client client = new ClientBuilder()
 	            .withApiKey("test_fAk7DUU8quzBG3tuH7PtbKBPyGN8ae")
 	            .withTestMode(true)
 	            .build();
 
-		logger.debug("client for payment is created, now creating payment, amount : "+String.valueOf(Math.round(orderTotal*100d)/100d));
+		logger.debug("client for payment is created, now creating payment, amount : "+f.format(order.getOrderTotal()));
+		
 		PaymentRequest paymentRequest = PaymentRequest.builder()
                 .amount(Amount.builder()
                         .currency("EUR")//String.valueOf(Math.round(orderTotal*100d)/100d)
-                        .value(String.valueOf(Math.round(orderTotal*100d)/100d))
+                        .value(f.format(order.getOrderTotal()))
                         .build())
                 .description(order.getFunctionalId())
                 .redirectUrl(Optional.of("http://localhost:8081/confirmation"+"?orderId="+order.getFunctionalId()))

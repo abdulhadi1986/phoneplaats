@@ -200,8 +200,6 @@
 	<script th:src="@{js/main.js}"></script>
 
     <script> $(document).ready(function() {
-    	console.log("count value "+$("#shopingCartItems").text());
-    	console.log("available qty : "+ $("#availableQty").val())
     	if ($("#shopingCartItems").text()==='0') {
     		$("#shopingCartItems").remove();
 		} 
@@ -213,8 +211,7 @@
     		}else{$("#quantityInput").val(1)}
     	});
     	
-    	$("#quantityPlus").click(function() {
-    		console.log($("#availableQty").val());
+    	$("#quantityPlus").click(function() {    		
     		if($("#quantityInput").val() < $("#availableQty").val()){
     			$("#quantityInput").val(Number($("#quantityInput").val())+1);
     		}

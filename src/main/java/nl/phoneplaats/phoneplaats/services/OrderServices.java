@@ -1,5 +1,6 @@
 package nl.phoneplaats.phoneplaats.services;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,6 +41,8 @@ public class OrderServices {
 			customerRepo.save(customer);
 			savedCustomer = customerRepo.findByEmail(customer.getEmail());
 		}else {
+			savedCustomer = customer;
+			customerRepo.save(savedCustomer);			
 			logger.debug("returning customer : " + customer);
 		}
 
@@ -134,7 +137,8 @@ public class OrderServices {
 		for(OrderDetail orderDetail: orderItems) {			
 			subTotal += orderDetail.getProduct().getProductPrice()*orderDetail.getQuantity();
 		}
-		order.setOrderTotal(Math.round(subTotal*100.00d)/100.00d);
+		
+		order.setOrderTotal((double) Math.round(subTotal*100d)/100d);
 		logger.debug("order total: " + order.getOrderTotal());
 		
 		
