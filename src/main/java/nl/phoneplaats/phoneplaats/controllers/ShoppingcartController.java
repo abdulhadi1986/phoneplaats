@@ -213,7 +213,7 @@ public class ShoppingcartController {
 			orderServices.perpareOrderForPayment(order);
 			
 		}catch (Exception e) {
-			logger.error("Error preparing order "+ e.getMessage());
+			logger.error("Error preparing order "+ e);
 			return "redirect:shippingInfo?error=OtherError";
 		}
 		
@@ -222,13 +222,13 @@ public class ShoppingcartController {
 		try {
 			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order);
 		}catch (MollieException e) {
-			logger.error("Error creating payament" + e.getMessage());
+			logger.error("Error creating payament" + e);
 			e.printStackTrace();
 			logger.debug("deleting order " + order.getFunctionalId());
 			orderRepo.deleteByOrderId(order.getOrderId());
 			return "redirect:shippingInfo?error=PaymentServerError";
 		}catch (Exception e) {
-			logger.error("another Error creating payament" + e.getMessage());
+			logger.error("another Error creating payament" + e);
 			e.printStackTrace();
 			logger.debug("deleting order " + order.getFunctionalId());
 			orderRepo.deleteByOrderId(order.getOrderId());
@@ -276,10 +276,10 @@ public class ShoppingcartController {
 			EmailServices.sendOrderConfirmationToCustomer(order);
 			EmailServices.sendOrderToSeller(order);			
 		} catch (MessagingException e) {
-			logger.error("ERROR happened while sending email for confirmation");
+			logger.error("ERROR happened while sending email for confirmation", e);
 			e.printStackTrace();
 		} catch (IOException e) {
-			logger.error("ERROR happened while sending email");
+			logger.error("ERROR happened while sending email", e);
 			e.printStackTrace();
 		}
 		

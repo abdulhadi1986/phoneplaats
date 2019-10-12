@@ -14,6 +14,7 @@ import be.feelio.mollie.data.common.Locale;
 import be.feelio.mollie.data.payment.PaymentRequest;
 import be.feelio.mollie.data.payment.PaymentResponse;
 import be.feelio.mollie.exception.MollieException;
+import nl.phoneplaats.phoneplaats.SystemConstants;
 import nl.phoneplaats.phoneplaats.dto.Order;
 import nl.phoneplaats.phoneplaats.repo.OrderRepo;
 
@@ -30,19 +31,19 @@ public class PaymentServices {
 		DecimalFormat f = new DecimalFormat("##.00");
 		
 		Client client = new ClientBuilder()
-	            .withApiKey("test_fAk7DUU8quzBG3tuH7PtbKBPyGN8ae")
+	            .withApiKey(SystemConstants.MOLLIE_TEST_KEY)
 	            .withTestMode(true)
 	            .build();
 
 		logger.debug("client for payment is created, now creating payment, amount : "+f.format(order.getOrderTotal()));
-		
+		logger.debug("REDIRECT URL: " + SystemConstants.CONFIRMATION_URL+"?orderId="+order.getFunctionalId());
 		PaymentRequest paymentRequest = PaymentRequest.builder()
                 .amount(Amount.builder()
                         .currency("EUR")//String.valueOf(Math.round(orderTotal*100d)/100d)
                         .value(f.format(order.getOrderTotal()))
                         .build())
                 .description(order.getFunctionalId())
-                .redirectUrl(Optional.of("http://localhost:8081/confirmation"+"?orderId="+order.getFunctionalId()))
+                .redirectUrl(Optional.of(SystemConstants.CONFIRMATION_URL+"?orderId="+order.getFunctionalId()))
                 .locale(Optional.of(Locale.nl_NL))
                 .build();
 		// .method(Optional.of(PaymentMethod.IDEAL)) needs to be enabled https://docs.mollie.com/reference/v2/profiles-api/enable-method
@@ -69,9 +70,9 @@ public class PaymentServices {
 	
 	public boolean isPaymentCompleted(Order order) throws MollieException {
 		Client client = new ClientBuilder()
-	            .withApiKey("test_hW7trRMaJphr8feGzMNtd5SwShQSwg")
+	            .withApiKey(SystemConstants.MOLLIE_TEST_KEY)
 	            .withTestMode(true)
-	            .withOrganizationToken("access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv")
+	            .withOrganizationToken(SystemConstants.MOLLIE_ACCESS_TOKEN)
 	            .build();
 		
 		logger.debug("checking the payment with id: "+order.getPaymentId());

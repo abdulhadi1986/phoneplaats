@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
+
+import nl.phoneplaats.phoneplaats.SystemConstants;
 import nl.phoneplaats.phoneplaats.dto.Category;
 import nl.phoneplaats.phoneplaats.dto.Inventory;
 import nl.phoneplaats.phoneplaats.dto.Order;
@@ -74,7 +76,7 @@ public class AdminController {
 	}
 	@RequestMapping(value="/admin/mgt/login", method=RequestMethod.POST)
 	public String checkLogin(String userName , String password, HttpSession session) {
-		if (userName.equals("phoneplaatsAdmin123") && password.equals("HelloWorld123")) {
+		if (userName.equals(SystemConstants.ADMIN_USERNAME) && password.equals(SystemConstants.ADMIN_PASSWORD)) {
 			session.setAttribute("adminLoggedIn", "true");
 			session.setMaxInactiveInterval(300);
 			return "redirect:/admin/mgt";

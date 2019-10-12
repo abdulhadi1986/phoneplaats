@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import com.sun.mail.smtp.SMTPMessage;
 
+import nl.phoneplaats.phoneplaats.SystemConstants;
 import nl.phoneplaats.phoneplaats.dto.Order;
 import nl.phoneplaats.phoneplaats.dto.OrderDetail;
 
@@ -47,7 +48,7 @@ public class EmailServices {
 						+order.getCustomer().getPostcode() + " "+ order.getCustomer().getCity();
 			      
 	    Message simpleMessage = buildSimpleMessage(session, emailTitle,emailBody);
-		sendMessageToAddress(simpleMessage, "abedscorpion@gmail.com");
+		sendMessageToAddress(simpleMessage, SystemConstants.INFO_EMAIL);
 	}
 	
 	public static void sendOrderConfirmationToCustomer(Order order) throws MessagingException, IOException {
@@ -69,14 +70,14 @@ public class EmailServices {
 	    Properties mailProps = new Properties();
 	    mailProps.put("mail.transport.protocol", "smtp");
 	    mailProps.put("mail.host", "smtp.gmail.com");
-	    mailProps.put("mail.from", "abedscorpion@gmail.com");
+	    mailProps.put("mail.from", SystemConstants.NO_REPLY_EMAIL);
 	    mailProps.put("mail.smtp.starttls.enable", "true");
 	    mailProps.put("mail.smtp.port", "587");
 	    mailProps.put("mail.smtp.auth", "true");
 	  
 	    // final, because we're using it in the closure below
 	    final PasswordAuthentication usernamePassword = new PasswordAuthentication(
-	        "abedscorpion@gmail.com", "3Bed-scorpion");
+	    		SystemConstants.NO_REPLY_EMAIL, SystemConstants.NO_REPLY_PASSWORD);
 	    Authenticator auth = new Authenticator() {
 	      protected PasswordAuthentication getPasswordAuthentication() {
 	        return usernamePassword;
@@ -181,10 +182,12 @@ public class EmailServices {
 	                      "<p>Voor alle vragen kunt u contact opnemen met ons klantservice op de onderstaande contactgegevens of u kunt een drict bericht sturen</p>"+
 	                      "<ul>"+
 	                         "<li>Address : No 40 Baria Sreet 133/2 NewYork City</li>"+
-	                          "<li><a href=\"#\">Infor@roadthemes.com</a></li>"+
-	                          "<li>0(1234) 567 890</li>"+
+	                          "<li><a href=\"#\">" + SystemConstants.INFO_EMAIL + "</a></li>"+
+	                          "<li>"+ SystemConstants.INFO_PHONE + "</li>"+
+	                          "<li>"+ SystemConstants.INFO_ADDRESS + "</li>"+
 	                      "</ul>"+             
-                      "</div>"+					  
+                      "</div>"+	
+                      "</br>"+
 				      "</body></html>";
 			return emailBody;
 		}
@@ -202,7 +205,7 @@ public class EmailServices {
 		    Message simpleMessage;
 			try {
 				simpleMessage = buildSimpleMessage(session, emailTitle,emailBody);
-				sendMessageToAddress(simpleMessage, "abedscorpion@gmail.com");
+				sendMessageToAddress(simpleMessage, SystemConstants.INFO_EMAIL);
 			} catch (MessagingException e) {
 				logger.debug("error sending message from Contact Us page " + e.getMessage());
 				e.printStackTrace();
@@ -218,7 +221,7 @@ public class EmailServices {
 		  Message simpleMessage;
 		  try {
 				simpleMessage = buildSimpleMessage(session, emailTitle, emailBody);
-				sendMessageToAddress(simpleMessage, "abedscorpion@gmail.com");
+				sendMessageToAddress(simpleMessage, SystemConstants.INFO_EMAIL);
 		  }catch (MessagingException e) {
 				logger.debug("error sending message with failure confirmation" + e.getMessage());
 				e.printStackTrace();

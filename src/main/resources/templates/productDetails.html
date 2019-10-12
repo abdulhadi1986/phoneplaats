@@ -43,11 +43,7 @@
 										<li th:each="num :${product.getProductImages()}" th:data-target="'#productCarousel'+${product.getProductId()}" data-slide-to="0" class="active"></li>
 									</ol>
 									<div class="carousel-inner">
-										<div class="justify-content-center" style="width: 300px; height: 450px; 
-																					background-color: white; 
-																					margin-left: auto;
-																					margin-right: auto;
-																					margin-top: auto;">
+										<div class="justify-content-center" >
 											<div id="image" class="carousel-item" th:each="images : ${product.getProductImages()}">
 												<img class="img-fluid" style="display: block;
 															margin-left: auto;

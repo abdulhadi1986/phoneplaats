@@ -17,9 +17,9 @@
                                 <li class="menu-item-has-children"><a  th:href="@{/home}">home</a>
                                 <li class="menu-item-has-children"><a th:href="@{/products}">Producten</a> 
                                     <ul class="sub-menu">
-                                        <li class="menu-item-has-children" th:each="category : ${categoryMap.keySet()}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}">
+                                        <li class="menu-item-has-children" th:each="category : ${categoryMap.keySet()}" th:if="${categoryMap.get(category)!=null}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}">
                                             <span th:text="${category.getCategoryName()}"></span></a>
-                                            <ul class="sub-menu" th:if="${categoryMap.get(category)!=null}">
+                                            <ul class="sub-menu">
                                                 <li th:each="product: ${categoryMap.get(category)}">
                                                     <a th:href="@{/productDetails(prodId=${product.getProductId()})}">
                                                         <span th:text="${product.getProductName()}"></span>

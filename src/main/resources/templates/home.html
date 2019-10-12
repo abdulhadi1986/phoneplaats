@@ -107,7 +107,7 @@
                             <h3>Product categorieën</h3>
                             <ul>
                                 <li><a th:href="@{/home}"><span>Alle categorieën</span></a></li>
-                                <li th:each="category : ${categoryMap.keySet()}">
+                                <li th:each="category : ${categoryMap.keySet()}" th:if="${categoryMap.get(category)!=null}">
                                     <a th:href="@{/home(categoryId=${category.getCategoryId()})}"><span th:text="${category.getCategoryName()}"></a>
                                 </li>
                             </ul>
@@ -153,7 +153,8 @@
                                    </div>
                                     <div class="product_thumb">
                                         <a class="primary_img" th:href="@{/productDetails(prodId=${product.getProductId()})}">
-                                            <img style="width:180px; height:350px;" th:src="${product.getProductImages().get(0).getImageUri()}" alt=""></a>
+                                            <!-- <img style="width:263px; height:350px;" th:src="${product.getProductImages().get(0).getImageUri()}" alt=""></a> -->
+                                            <img class="img-fluid" th:src="${product.getProductImages().get(0).getImageUri()}" alt=""></a>
                                         <div class="label_product">
                                             <span class="label_sale">Aanbieding!</span>
                                         </div>

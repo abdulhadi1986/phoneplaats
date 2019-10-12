@@ -41,6 +41,7 @@ public class OrderServices {
 			customerRepo.save(customer);
 			savedCustomer = customerRepo.findByEmail(customer.getEmail());
 		}else {
+			customer.setCustomerId(savedCustomer.getCustomerId());
 			savedCustomer = customer;
 			customerRepo.save(savedCustomer);			
 			logger.debug("returning customer : " + customer);
