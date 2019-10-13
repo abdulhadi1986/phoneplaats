@@ -23,18 +23,13 @@ public class AdminServices {
 		Map<String, List<Order>> salesOverview= new HashMap<>();
 		Set<String> listOfMonths = new HashSet<String>();
 		for (Order order : allOrders) {			
-			String month = order.getOrderDate().getMonth().toString() + order.getOrderDate().getYear();			
-			System.out.println("keyset now : " + salesOverview.keySet());
-			if (listOfMonths.add(month)) {
-				System.out.println("set doesn't contain "+ month);
-				
+			String month = order.getOrderDate().getMonth().toString().toLowerCase()+ " - " + order.getOrderDate().getYear();				
+			if (listOfMonths.add(month)) {				
 				List<Order> monthOrders = new ArrayList<>();
 				monthOrders.add(order);
-				salesOverview.put(month, monthOrders);
-				System.out.println(month+" key is added and empty list created");
+				salesOverview.put(month, monthOrders);				
 			}else {
 				salesOverview.get(month).add(order);
-				System.out.println("set contain "+ month + " " +salesOverview.get(month));
 			}
 		}
 		

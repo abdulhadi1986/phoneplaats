@@ -37,7 +37,7 @@
                                         <li class="mega_items"><a class="active" th:href="@{/products}">Producten<i class="fa fa-angle-down"></i></a> 
                                             <div class="mega_menu">
                                                 <ul class="mega_menu_inner">
-                                                    <li th:each="category : ${categoryMap.keySet()}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}" th:if="${categoryMap.get(category)!=null}">
+                                                    <li th:each="category : ${categoryMap.keySet()}"><a th:href="@{/home(categoryId=${category.getCategoryId()})}" th:if="${categoryMap.get(category).size() !=0}">
                                                         <span th:text="${category.getCategoryName()}"></span></a>
                                                         <ul>
                                                             <li th:each="product: ${categoryMap.get(category)}">

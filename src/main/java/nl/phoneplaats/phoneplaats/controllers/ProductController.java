@@ -42,69 +42,95 @@ public class ProductController implements ErrorController{
 	public String getAllProducts(Model model 
 								, HttpSession session
 								,@RequestParam(value="categoryId", required=false, defaultValue="0") int categoryId) {
-		
-		generalServices.setPageHeader(model, session);
-		List<Product> allProducts = new ArrayList<>();
-		
-		for (Product product:inventoryDao.getAllProducts(categoryId)) {
-			productDao.setProductImages(product);
-			allProducts.add(product);
+		try {
+			generalServices.setPageHeader(model, session);
+			List<Product> allProducts = new ArrayList<>();
+			
+			for (Product product:inventoryDao.getAllProducts(categoryId)) {
+				productDao.setProductImages(product);
+				allProducts.add(product);
+			}
+			
+			model.addAttribute("allProducts", allProducts);		
+			
+			return "home";
+			
+		}catch(Exception e) {
+			logger.debug("ERROR", e);
+			return "error";
 		}
 		
-		model.addAttribute("allProducts", allProducts);		
-		
-		return "home";
 	}
 	
 	@RequestMapping(value="/productDetails", method=RequestMethod.GET)
 	public String getProductDetails(Model model, @RequestParam(value="prodId", required=true) int prodId,
 												@RequestParam(value="error", required=false, defaultValue="0") int error
 												,HttpSession session) {
-			
-		generalServices.setPageHeader(model, session);
-		Product product = productServices.setProductInfo(prodId);
-		model.addAttribute("product", product);
-		logger.debug("getting product details: "+ product.getProductName());
-		if(error == 1) {
-			model.addAttribute("quantityerror", "Het aantal beschikbare artikelen op dit moment is("
-					+ inventoryDao.getProductInventory(product)+")");
-			
-		}
+		
+		try {
+			generalServices.setPageHeader(model, session);
+			Product product = productServices.setProductInfo(prodId);
+			model.addAttribute("product", product);
+			logger.debug("getting product details: "+ product.getProductName());
+			if(error == 1) {
+				model.addAttribute("quantityerror", "Het aantal beschikbare artikelen op dit moment is("
+						+ inventoryDao.getProductInventory(product)+")");
 				
-		model.addAttribute("formattedSpec", productServices.getFormattedSpec(product));
-						
-		return "productDetails";
+			}
+					
+			model.addAttribute("formattedSpec", productServices.getFormattedSpec(product));
+							
+			return "productDetails";
+			
+		}catch(Exception e) {
+			logger.debug("ERROR", e);
+			return "error";
+		}
+		
 	}
 	
 	@RequestMapping(value="/contact", method=RequestMethod.GET)
 	public String getContactUs(Model model , HttpSession session, @RequestParam(value="message", required=false, defaultValue="") String message) {
-		generalServices.setPageHeader(model, session);
-		String messageParam="";
-		String errorMessage="";
-		if (message.contentEquals("sent")) {
-			messageParam= "Uw message is verzonden. U krijgt een reactie van ons z.s.m.";
-		}else if (message.equals("messinginfo")) {
-			logger.debug("sedning messge from contact us page failed because of empty fields");
-			errorMessage= "Alle velden moet ingevuld worden!";
-		}
-		
-		model.addAttribute("messageParam", messageParam);
-		model.addAttribute("errorMessage", errorMessage);
-		return "contact-ons";
+		try {
+			generalServices.setPageHeader(model, session);
+			String messageParam="";
+			String errorMessage="";
+			if (message.contentEquals("sent")) {
+				messageParam= "Uw message is verzonden. U krijgt een reactie van ons z.s.m.";
+			}else if (message.equals("messinginfo")) {
+				logger.debug("sedning messge from contact us page failed because of empty fields");
+				errorMessage= "Alle velden moet ingevuld worden!";
+			}
+			
+			model.addAttribute("messageParam", messageParam);
+			model.addAttribute("errorMessage", errorMessage);
+			return "contact-ons";
+			
+		}catch(Exception e) {
+			logger.debug("ERROR", e);
+			return "error";
+		}	
 		
 	}
 	
 	@RequestMapping(value="/sendContactMessage" , method=RequestMethod.POST)
 	public String sendMessageFromContact(String name, String email, String subject, String message) {
-		if(name.trim().isEmpty() || email.trim().isEmpty()||subject.trim().isEmpty() || message.trim().isEmpty())
-			return "redirect:/contact?message=messinginfo";
-		EmailServices.sendEmailFromContactPage(name, email, subject, message);
-		return "redirect:/contact?message=sent";
+		try {
+			if(name.trim().isEmpty() || email.trim().isEmpty()||subject.trim().isEmpty() || message.trim().isEmpty())
+				return "redirect:/contact?message=messinginfo";
+			EmailServices.sendEmailFromContactPage(name, email, subject, message);
+			return "redirect:/contact?message=sent";
+		}catch(Exception e) {
+			logger.debug("ERROR", e);
+			return "error";
+		}	
+		
 	}
 	
 	@RequestMapping(ERROR_PATH)
 	public String errorHandler(HttpServletRequest request, Model model, HttpSession session) {
 		Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
+		generalServices.setPageHeader(model, session);
 		if (status != null) {
 			generalServices.setPageHeader(model, session);
 			Integer statusCode = Integer.valueOf(status.toString()); 

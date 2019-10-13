@@ -39,10 +39,30 @@
 <!--end NAV-->
 
 <div class="container">
-	<ul>
-		<li th:each="sales : ${allSales.keySet()}"><a th:href="@{/admin/monthlysalesoverview(month=${sales})}"><h5 th:text="${sales} + '  : '"> </h5></a><label th:text="'&euro; ' +${allSales.get(sales)}"></label></li>
-	</ul>
-	
+	<table class="table">
+		<thead>
+			<tr>
+				<th scope="col" class="product_name">
+					Month
+				</th>
+				<th scope="col" class="product_name">
+					Total Sales
+				</th>						
+			</tr>
+		</thead>
+		<tbody id="tableBody">
+			<tr th:each="sales : ${allSales.keySet()}">					
+				<th scope="row" class="border-0">
+					<a th:href="@{/admin/monthlysalesoverview(month=${sales})}">
+						<div class="p-2">
+								<label class="text-primary" th:text="${sales} + '  :'"> </label>
+						</div>
+					</a>
+				</th>
+				<td id="productPrice" class="border-0 align-middle" th:text="' &euro; '+${#numbers.formatDecimal(allSales.get(sales), 0, 'POINT', 2, 'COMMA')}"></td>
+			</tr>
+		</tbody>
+	</table>		
 </div>
 </br></br>
 

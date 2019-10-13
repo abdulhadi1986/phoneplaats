@@ -108,15 +108,17 @@ public class AdminController {
 	public String saveProduct(Product product, HttpSession session) {
 		if (session.getAttribute("adminLoggedIn") == null || session.getAttribute("adminLoggedIn").equals("false") )
 			return "login";
-		
+		logger.debug("product id: " + product.getProductId());
+		logger.debug(product.toString());
 		if (product.getProductId() == 0) {
 			if (productRepo.findByProductName(product.getProductName()) != null) {
 				return "redirect:/admin/mgt?error='product with the same name already exists'";
 			}
 			//save item to the database and get the generated ID
+			logger.debug("saving product , product images " + product.getProductImages());
 			productRepo.save(product);
-			product.setProductId(productRepo.findByProductName(product.getProductName()).getProductId());
-			
+			//product.setProductId(productRepo.findByProductName(product.getProductName()).getProductId());
+			logger.debug("after saving , product images " + product.getProductImages());
 			//save item to the inventory 
 			Inventory inventoryItem = new Inventory();
 			inventoryItem.setProduct(product);
@@ -125,7 +127,7 @@ public class AdminController {
 			
 			return "redirect:/admin/mgt/addimage?productId="+product.getProductId()+"&productName='"+product.getProductName()+"'";
 		}
-		
+		product.setProductImages(imageRepo.findByProduct(product));
 		productRepo.save(product);
 		
 		return "redirect:/admin/mgt";

@@ -73,7 +73,11 @@
 				<div class="form-group" th:if="${!error.isEmpty()}">
 					<label class="text-danger" th:text="${error}"></label> 
 					
-	            </div>
+				</div>
+				<div class="form-group" th:if="${product.getProductId() != 0}">
+					<label for="productId">Product ID :</label> 					 
+					<input type="text" class="form-control" placeholder="product Name" th:field="*{productId}" name="productId" readonly>
+				</div>
 				<div class="form-group">
 					<label for="productName">Product Name :</label> 
 					<input type="text" class="form-control" placeholder="product Name" th:field="*{productName}" name="productName" required>
