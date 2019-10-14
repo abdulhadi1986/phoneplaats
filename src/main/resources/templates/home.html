@@ -135,7 +135,7 @@
                     <!--shop toolbar end-->
                     <div class="row shop_wrapper">
                         <!-- Products in sale  -->
-                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductSalePrice() > 0}">
+                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductSalePrice()} > 0.00 AND ${product.getProductPrice()} != ${product.getProductSalePrice()}">
                             <article class="single_product">
                                 <figure>
                                     <div class="product_name">

@@ -200,7 +200,7 @@
 					      success : function(result) {
 					        if(result.status == "Done"){
 					          
-					        console.log(result);}
+					        console.log('.');}
 					      }
 					    });
 					}else{$(this).next().val(1)}
@@ -222,7 +222,7 @@
 					      success : function(result) {
 					        if(result.status == "Done"){
 					          
-					        console.log(result);}
+					        console.log('.');}
 					      }
 					    });
 					
@@ -241,22 +241,28 @@
 					      success : function(result) {
 					        if(result.status == "Done"){
 					          
-					        console.log(result);}
+					        console.log('.');}
 					      }
 					    });
 					
                     $(this).parent().remove();
                     calculateSubTotal();
                     $("#shopingCartItems").text(Number($("#shopingCartItems").text())-1);
-                    
+                    var itemCount = $("#shopingCartItems").text();
                     if(!$(this).parent().find().attr("id")){
-                    	console.log("no more items");
+                    	console.log(".");
                     	$("#btncheckout").attr("disabled", true);
                     	$("#noItemsError").text("Er zijn geen artikelen meer in uw shoppingcart");
                     }else {
-                    	console.log("items found the code is not correct");
+                    	console.log(".");
                     }
+					if (itemCount > 0 ){
+						$("#item-counts-label").text(itemCount + ' artikelen');
+					}else {
+						$("#item-counts-label").text('0 artikelen');
+					}
                     
+					
                     
                 });
 			
@@ -283,6 +289,7 @@
 		$("#orderSubtotal").text('Totaal :      € ' + subTotal.toFixed(2)).html();
 		$("#orderSubtotal-1").text('Totaal :      € ' + subTotal.toFixed(2)).html();
 		$(".cart_price").text('€' + subTotal.toFixed(2)).html();
+		
 		/* calculateTotal(); */
 	}
 	 

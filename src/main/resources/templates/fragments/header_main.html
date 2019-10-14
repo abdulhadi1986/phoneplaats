@@ -59,7 +59,8 @@
                                                    <i class="ion-android-cart"></i>
                                                </span>
                                                <span class="cart_title" th:if="${shoppingItemsCount>0}">
-                                                    <span class="cart_quantity" th:text="${shoppingItemsCount}+ ' item(s)'"></span>
+                                                   <input type="hidden" id="item-counts" th:value="${shoppingItemsCount}">
+                                                    <span id ="item-counts-label" class="cart_quantity" th:text="${shoppingItemsCount}+ ' artikel(en)'"></span>
                                                     <span class="cart_price" th:text="'&euro;'+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
                                                 </span>
                                                 <span class="cart_title" th:if="${shoppingItemsCount==0}">
