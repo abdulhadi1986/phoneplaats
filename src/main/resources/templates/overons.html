@@ -96,56 +96,34 @@
             </div>
         </div>
     </div>    
-<!--contact map start-->
-    <div class="contact_map mt-45">
-       <div class="map-area">
-          <div id="googleMap" class="justify-content-center col-md-12">
-                <iframe class="col-md-12" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2456.329968647982!2d4.485435851213516!3d52.0008649796197!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47c5cbf52147316b%3A0x2e3c81ae95803536!2sBeukensingel%2042%2C%202651%20TS%20Berkel%20en%20Rodenrijs!5e0!3m2!1snl!2snl!4v1569617583484!5m2!1snl!2snl" height="450" frameborder="0" style="border:0;" allowfullscreen=""></iframe>
-          </div>
-       </div>
-    </div>
-    <!--contact map end-->
-    
     <!--contact area start-->
     <div class="contact_area">
         <div class="container">   
             <div class="row">
                 <div class="col-lg-6 col-md-12">
                    <div class="contact_message content">
-                        <h3>Contact ons</h3>    
-                         <p>Voor alle vragen kunt u contact opnemen met ons klantservice op de onderstaande contactgegevens of u kunt een drict bericht sturen</p>
-                        <ul>
-                            <li><i class="fa fa-fax"></i>  Address : Beukensingel 42, 2651 TS Berkel en Rodenrijs</li>
-                            <li><i class="fa fa-envelope-o"></i> <a href="#">info@phoneplaats.nl</a></li>
-                            <li><i class="fa fa-phone"></i> (+31) 685136952</li>
-                        </ul>             
+                        <h3>Over refurbished</h3>    
+                         <p>Als je een refurbished iPhone gaat kopen, wil je er zeker van zijn dat je kwaliteit koopt.In sommige gevallen 
+                             valt een refurbished iPhone niet van een nieuwe iPhone te onderscheiden, maar in andere gevallen ziet de 
+                             iPhone er gebruikt uit. Wij proberen dit al aan te geven door middel van sterren. Een ‘zo goed als nieuw’ 
+                             toestel krijgt bij ons 5 sterren en een ‘goed’ toestel krijgt 4 sterren.</p>                                   
                     </div> 
                 </div>
                 <div class="col-lg-6 col-md-12">
-                   <div class="contact_message form ">
-                        <h3>Tell us your project</h3>   
-                        <form method="POST"  th:action="@{/sendContactMessage}">
-                            <p class="form-group">  
-                               <label> Uw Naam  <span>*</span></label>
-                                <input name="name" type="text" required> 
-                            </p>
-                            <p>       
-                               <label>  Uw Email  <span>*</span></label>
-                                <input name="email" type="email" required>
-                            </p>
-                            <p>          
-                               <label>  Onderwerp  <span>*</span></label>
-                                <input name="subject" type="text" required>
-                            </p>    
-                            <div class="contact_textarea">
-                                <label> Uw berich:  <span>*</span></label>
-                                <textarea name="message"  class="form-control2" required></textarea>     
-                            </div>  
-                            <p><span th:text="${messageParam}" class="text-success"></span><span th:text="${errorMessage}" class="text-danger"></span></p>  
-                            <button type="submit"> Send</button>  
-                            
-                        </form>
-                    </div> 
+                        <div id="promoInfo" class="bg-light pl-5">
+                        </br>
+                            <h3>Waarom PhonePlaats?</h3> 
+                            <ul class="group-list" style="list-style-type: none;">
+                                <li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Zo goed als nieuw</li>
+                                <li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Niet goed? geld terug</li>
+                                <li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Simlockvrij</li>
+                                <li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;Inclusief bijbehorende accessoires</li> 
+                                <li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;gratis bezorging en gratis retour</li>
+                                <li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;30 dagen bedenktijd</li>
+                                <li class="group-list-item"><i class="fa fa-check" style="color:grey;"></i>&#9;betaal snel en makkelijk met iDEAL</li>
+                            </ul>
+                            </br>	
+                        </div>
                 </div>
             </div>
         </div>    
