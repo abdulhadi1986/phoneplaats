@@ -48,7 +48,6 @@ public class ProductServices {
 		Map<Category, List<Product>> categoriesAndProducts = new HashMap<>();
 		for (Category cat : categoryRepo.findAll()) {
 			List<Product> productList= productRepo.findByProductCategory(cat);
-			logger.debug("list size for category: "+ cat.getCategoryName() + " : " + productList.size());
 			if (productList != null) {
 				categoriesAndProducts.put(cat,productList);
 			}
@@ -62,8 +61,7 @@ public class ProductServices {
 	 * @param product
 	 * @return
 	 */
-	public String[] getFormattedSpec(Product product) {
-		logger.debug("getting product formatted descritpion" + product.getProductDescription().split(";"));
+	public String[] getFormattedSpec(Product product) {		
 		return product.getProductDescription().split(";");
 	}
 }
