@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.mail.MessagingException;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -226,7 +227,8 @@ public class ShoppingcartController {
 	public String doCheckout(@ModelAttribute Customer customer
 							, HttpSession session
 							,String extraNotes
-							,String bankInfo) {
+							,String bankInfo
+							,ServletRequest request) {
 		try {
 			Order order = (Order) session.getAttribute("order");
 			
@@ -248,7 +250,7 @@ public class ShoppingcartController {
 			String returnedURL="";
 			
 			try {
-				returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order);
+				returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order, request);
 			}catch (MollieException e) {
 				logger.error("Error creating payament" + e);
 				e.printStackTrace();

@@ -3,6 +3,9 @@ package nl.phoneplaats.phoneplaats.services;
 import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.util.Optional;
+
+import javax.servlet.ServletRequest;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +29,7 @@ public class PaymentServices {
 	//access token : access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv
 	//profile id : pfl_DPxajhSzEr
 	//access token: access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv
-	public String createPayment(double orderTotal, Order order) throws MollieException {
+	public String createPayment(double orderTotal, Order order, ServletRequest request) throws MollieException {
 		
 		DecimalFormat f = new DecimalFormat("##.00");
 		
@@ -36,14 +39,14 @@ public class PaymentServices {
 	            .build();
 
 		logger.debug("client for payment is created, now creating payment, amount : "+f.format(order.getOrderTotal()));
-		logger.debug("REDIRECT URL: " + SystemConstants.CONFIRMATION_URL+"?orderId="+order.getFunctionalId());
+		logger.debug("REDIRECT URL: " + request.getProtocol().substring(0,request.getProtocol().indexOf('/'))+"://"+request.getServerName()+ ":"+ request.getServerPort()+"/confirmation?orderId="+order.getFunctionalId());
 		PaymentRequest paymentRequest = PaymentRequest.builder()
                 .amount(Amount.builder()
                         .currency("EUR")//String.valueOf(Math.round(orderTotal*100d)/100d)
                         .value(f.format(order.getOrderTotal()))
                         .build())
                 .description(order.getFunctionalId())
-                .redirectUrl(Optional.of(SystemConstants.CONFIRMATION_URL+"?orderId="+order.getFunctionalId()))
+                .redirectUrl(Optional.of(request.getProtocol().substring(0,request.getProtocol().indexOf('/'))+"://"+request.getServerName()+ ":"+ request.getServerPort()+"/confirmation?orderId="+order.getFunctionalId()))
                 .locale(Optional.of(Locale.nl_NL))
                 .build();
 		// .method(Optional.of(PaymentMethod.IDEAL)) needs to be enabled https://docs.mollie.com/reference/v2/profiles-api/enable-method

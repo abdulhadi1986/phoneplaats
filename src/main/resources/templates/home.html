@@ -135,7 +135,7 @@
                     <!--shop toolbar end-->
                     <div class="row shop_wrapper">
                         <!-- Products in sale  -->
-                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductSalePrice()} > 0.00 AND ${product.getProductPrice()} != ${product.getProductSalePrice()}">
+                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductPrice()} > 0.00 AND ${product.getProductSalePrice()} != ${product.getProductPrice()}">
                             <article class="single_product">
                                 <figure>
                                     <div class="product_name">
@@ -164,15 +164,15 @@
                                     </div>
                                     <div class="product_footer product_content grid_content">
                                         <div class="price_box"> 
-                                            <span class="old_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductPrice(), 0, 'POINT', 2, 'COMMA')}"></span> 
-                                            <span class="current_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductSalePrice(), 0, 'POINT', 2, 'COMMA')}"></span>
+                                            <span class="old_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductSalePrice(), 0, 'POINT', 2, 'COMMA')}"></span> 
+                                            <span class="current_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductPrice(), 0, 'POINT', 2, 'COMMA')}"></span>
                                         </div>
                                     </div>
                                 </figure>
                             </article>
                         </div>
                         <!-- Not in sales products -->
-                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductSalePrice()} == 0.00 OR ${product.getProductPrice()} == ${product.getProductSalePrice()}">
+                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductPrice()} == 0.00 OR ${product.getProductSalePrice()} == ${product.getProductPrice()}">
                             <article class="single_product">
                                 <figure>
                                     <div class="product_name">

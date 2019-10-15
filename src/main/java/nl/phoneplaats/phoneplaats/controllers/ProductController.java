@@ -3,6 +3,7 @@ package nl.phoneplaats.phoneplaats.controllers;
 import java.util.ArrayList;
 import java.util.List;
 import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
@@ -42,8 +43,9 @@ public class ProductController implements ErrorController{
 	@RequestMapping(value= {"/","/home","/products","/index"}, method=RequestMethod.GET)
 	public String getAllProducts(Model model 
 								, HttpSession session
-								,@RequestParam(value="categoryId", required=false, defaultValue="0") int categoryId) {
+								,@RequestParam(value="categoryId", required=false, defaultValue="0") int categoryId, ServletRequest request) {
 		try {
+			logger.debug("REDIRECT URL: " + request.getProtocol().substring(0,request.getProtocol().indexOf('/'))+"://"+request.getServerName()+ ":"+ request.getServerPort()+"/confirmation?orderId=");
 			generalServices.setPageHeader(model, session);
 			List<Product> allProducts = new ArrayList<>();
 			
