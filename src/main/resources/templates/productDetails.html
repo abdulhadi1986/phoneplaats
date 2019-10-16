@@ -100,7 +100,7 @@
 							
 		
 							<div class="price_box" id="productPrice"> 
-								<span class="old_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductSalePrice(), 0, 'POINT', 2, 'COMMA')}"></span> 
+								<span class="old_price" th:if="${product.getProductSalePrice()} != ${product.getProductPrice()}" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductSalePrice(), 0, 'POINT', 2, 'COMMA')}"></span> 
 								<span class="current_price" th:text="' &euro; '+${#numbers.formatDecimal(product.getProductPrice(), 0, 'POINT', 2, 'COMMA')}"></span>
 							</div>
 																			

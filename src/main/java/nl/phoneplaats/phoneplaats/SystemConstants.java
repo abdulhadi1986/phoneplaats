@@ -3,9 +3,9 @@ package nl.phoneplaats.phoneplaats;
 public class SystemConstants {
 	public static final String ADMIN_USERNAME = "phoneplaatsAdmin123"; 
 	public static final String ADMIN_PASSWORD = "HelloWorld123";
-	public static final String CONFIRMATION_URL = "http://localhost:8081/confirmation";
+	public static final String CONFIRMATION_URL = "http://localhost:9000/phoneplaats/confirmation";
 	public static final String SELLER_EMAIL = "abedscorpion@gmail.com";
-	public static final String NO_REPLY_EMAIL = "noreply.phoneplaatnl";
+	public static final String NO_REPLY_EMAIL = "noreply.phoneplaatnl@gmail.com";
 	public static final String NO_REPLY_PASSWORD = "Helloworld123";
 	public static final String INFO_EMAIL = "abedscorpion@gmail.com";
 	public static final String INFO_ADDRESS = "address of phoneplaats";

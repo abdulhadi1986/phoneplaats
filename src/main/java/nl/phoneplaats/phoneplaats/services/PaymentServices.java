@@ -29,7 +29,7 @@ public class PaymentServices {
 	//access token : access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv
 	//profile id : pfl_DPxajhSzEr
 	//access token: access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv
-	public String createPayment(double orderTotal, Order order, ServletRequest request) throws MollieException {
+	public String createPayment(double orderTotal, Order order) {
 		
 		DecimalFormat f = new DecimalFormat("##.00");
 		
@@ -39,14 +39,13 @@ public class PaymentServices {
 	            .build();
 
 		logger.debug("client for payment is created, now creating payment, amount : "+f.format(order.getOrderTotal()));
-		logger.debug("REDIRECT URL: " + request.getProtocol().substring(0,request.getProtocol().indexOf('/'))+"://"+request.getServerName()+ ":"+ request.getServerPort()+"/confirmation?orderId="+order.getFunctionalId());
 		PaymentRequest paymentRequest = PaymentRequest.builder()
                 .amount(Amount.builder()
                         .currency("EUR")//String.valueOf(Math.round(orderTotal*100d)/100d)
                         .value(f.format(order.getOrderTotal()))
                         .build())
                 .description(order.getFunctionalId())
-                .redirectUrl(Optional.of(request.getProtocol().substring(0,request.getProtocol().indexOf('/'))+"://"+request.getServerName()+ ":"+ request.getServerPort()+"/confirmation?orderId="+order.getFunctionalId()))
+                .redirectUrl(Optional.of(SystemConstants.CONFIRMATION_URL+"?orderId="+order.getFunctionalId()))
                 .locale(Optional.of(Locale.nl_NL))
                 .build();
 		// .method(Optional.of(PaymentMethod.IDEAL)) needs to be enabled https://docs.mollie.com/reference/v2/profiles-api/enable-method
@@ -54,8 +53,8 @@ public class PaymentServices {
 			
 			logger.debug("payment request is creaeted");
 			//epaymentRequest.setProfileId(Optional.of("pfl_DPxajhSzEr"));
-			PaymentResponse paymentResponse = client.payments().createPayment(paymentRequest);
-			
+			try {
+				PaymentResponse paymentResponse = client.payments().createPayment(paymentRequest);			
 			order.setStatus(paymentResponse.getStatus());
 			logger.debug("payment status for the order: "+ order.getStatus());
 			
@@ -67,7 +66,14 @@ public class PaymentServices {
 
 			logger.debug("the payment : " + paymentResponse.getStatus() + " " +paymentResponse.getAmount()+" "+paymentResponse.getLinks().getStatus());
 			logger.debug("the link : "+paymentResponse.getLinks().getCheckout().getHref());
-		return paymentResponse.getLinks().getCheckout().getHref();		
+			return paymentResponse.getLinks().getCheckout().getHref();		
+			
+			}catch (MollieException e) {
+				logger.error("ERROR",e);
+				logger.debug("deleting order " + order.getFunctionalId());
+				orderRepo.deleteByOrderId(order.getOrderId());
+				return "redirect:shippingInfo?error=PaymentServerError";
+			}
 	
 	}
 	

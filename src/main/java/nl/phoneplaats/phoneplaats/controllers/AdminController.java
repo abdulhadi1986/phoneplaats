@@ -110,6 +110,8 @@ public class AdminController {
 			return "login";
 		logger.debug("product id: " + product.getProductId());
 		logger.debug(product.toString());
+		if (product.getProductPrice() < 1 || product.getProductPrice() > product.getProductSalePrice())
+			product.setProductPrice(product.getProductSalePrice());
 		if (product.getProductId() == 0) {
 			if (productRepo.findByProductName(product.getProductName()) != null) {
 				return "redirect:/admin/mgt?error='product with the same name already exists'";
@@ -128,6 +130,7 @@ public class AdminController {
 			return "redirect:/admin/mgt/addimage?productId="+product.getProductId()+"&productName='"+product.getProductName()+"'";
 		}
 		product.setProductImages(imageRepo.findByProduct(product));
+		
 		productRepo.save(product);
 		
 		return "redirect:/admin/mgt";

@@ -172,7 +172,7 @@
                             </article>
                         </div>
                         <!-- Not in sales products -->
-                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductPrice()} == 0.00 OR ${product.getProductSalePrice()} == ${product.getProductPrice()}">
+                        <div class="col-lg-4 col-md-4 col-12" th:each="product:${allProducts}" th:if="${product.getProductSalePrice()} == ${product.getProductPrice()}">
                             <article class="single_product">
                                 <figure>
                                     <div class="product_name">

@@ -227,8 +227,7 @@ public class ShoppingcartController {
 	public String doCheckout(@ModelAttribute Customer customer
 							, HttpSession session
 							,String extraNotes
-							,String bankInfo
-							,ServletRequest request) {
+							,String bankInfo) {
 		try {
 			Order order = (Order) session.getAttribute("order");
 			
@@ -250,13 +249,9 @@ public class ShoppingcartController {
 			String returnedURL="";
 			
 			try {
-				returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order, request);
-			}catch (MollieException e) {
-				logger.error("Error creating payament" + e);
-				e.printStackTrace();
-				logger.debug("deleting order " + order.getFunctionalId());
-				orderRepo.deleteByOrderId(order.getOrderId());
-				return "redirect:shippingInfo?error=PaymentServerError";
+				
+			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order);
+			
 			}catch (Exception e) {
 				logger.error("another Error creating payament" + e);
 				e.printStackTrace();
