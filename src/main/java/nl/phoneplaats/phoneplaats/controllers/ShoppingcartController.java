@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.mail.MessagingException;
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -227,7 +228,8 @@ public class ShoppingcartController {
 	public String doCheckout(@ModelAttribute Customer customer
 							, HttpSession session
 							,String extraNotes
-							,String bankInfo) {
+							,String bankInfo
+							,HttpServletRequest request) {
 		try {
 			Order order = (Order) session.getAttribute("order");
 			
@@ -250,7 +252,7 @@ public class ShoppingcartController {
 			
 			try {
 				
-			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order);
+			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order, request);
 			
 			}catch (Exception e) {
 				logger.error("another Error creating payament" + e);

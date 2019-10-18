@@ -87,7 +87,7 @@
 													<input id="availableQty" type="hidden" th:value="${orderDetail.getProduct().getAvailableQty()}">	
 													<input type ="hidden" id ="productId" th:value= "${orderDetail.getProduct().getProductId()}">
 												</td>               
-												<td id="deleteOrderItem" class="border-0 align-middle"><a class="text-dark" href="#"><i class="fa fa-trash"></i></a></td>
+												<td id="deleteOrderItem" class="border-0 align-middle"><a class="text-dark" href=""><i class="fa fa-trash"></i></a></td>
 											</tr>
 										</tbody>
 									</table>
@@ -138,7 +138,7 @@
 					<a  th:href="@{/products}" class="btn btn-primary rounded-pill py-2 btn-block">Verder Winkelen</a>
 				</div>
 				<div class="col-md-6">
-					<button id="btncheckout" type="submit" class="btn btn-dark rounded-pill py-2 btn-block">Bestellen Afronden</button>	
+					<button id="btncheckout" type="submit" class="btn btn-dark rounded-pill py-2 btn-block" th:if="${shoppingItemsCount} > 0" >Bestellen Afronden</button>	
 				</div>
 			</div> 
 		</div>
@@ -184,10 +184,9 @@
 			calculateSubTotal();
 				
 				$("td a[id*='quantityMin']").click(function() {
-					if($(this).next().val()-1 >0){
-						$(this).next().val(Number($(this).next().val())-1);
-					
-					
+					var quantityInput = Number($(this).next("#quantityInput").val()) - 1;
+					if(quantityInput > 0){
+						$(this).next("#quantityInput").val(quantityInput);				
 					
 					calculateSubTotal();
 					var prodId = $(this).parent().find("#productId").val();
@@ -197,18 +196,21 @@
 					      url : window.location + "/decreaseAmountAjax",
 					      data :JSON.stringify(prodId),
 					      dataType : 'json',
-					      success : function(result) {
-					        if(result.status == "Done"){
-					          
-					        console.log('.');}
-					      }
+					      success : function(result) {}
 					    });
-					}else{$(this).next().val(1)}
+					}else{$(this).next("#quantityInput").val(1)}
 				});
 				
-				$("td a[id*='quantityPlus']").click(function() {
-					if($("#quantityInput").val() < $("#availableQty").val()){
-						$(this).prev().val(Number($(this).prev().val())+1);
+				$("td a[id*='quantityPlus']").click(function() {					
+					var availableQty = Number($(this).next("#availableQty").val());
+					var quantityInput = Number($(this).prev("#quantityInput").val());
+					
+					if(quantityInput < availableQty){						
+						quantityInput++;
+						$(this).prev("#quantityInput").val(quantityInput);						
+					} else {
+						$(this).prev("#quantityInput").val(availableQty);
+						return;
 					}
 					calculateSubTotal();
 					
@@ -219,11 +221,7 @@
 					      url : window.location + "/increaseAmountAjax",
 					      data :JSON.stringify(prodId),
 					      dataType : 'json',
-					      success : function(result) {
-					        if(result.status == "Done"){
-					          
-					        console.log('.');}
-					      }
+					      success : function(result) { }
 					    });
 					
 					
@@ -238,15 +236,13 @@
 					      url : window.location + "/deleteFromCartAjax",
 					      data :JSON.stringify(prodId),
 					      dataType : 'json',
-					      success : function(result) {
-					        if(result.status == "Done"){
-					          
-					        console.log('.');}
-					      }
+					      success : function(result) {}
 					    });
 					
                     $(this).parent().remove();
                     calculateSubTotal();
+					/*
+					console.log('the value of caritems count: '+ $("#shopingCartItems").text());
                     $("#shopingCartItems").text(Number($("#shopingCartItems").text())-1);
                     var itemCount = $("#shopingCartItems").text();
                     if(!$(this).parent().find().attr("id")){
@@ -262,7 +258,7 @@
 						$("#item-counts-label").text('0 artikelen');
 					}
                     
-					
+					*/
                     
                 });
 			

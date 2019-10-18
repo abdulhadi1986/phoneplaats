@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 import javax.servlet.ServletRequest;
+import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +30,15 @@ public class PaymentServices {
 	//access token : access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv
 	//profile id : pfl_DPxajhSzEr
 	//access token: access_37DBe46Hy6HbmBFquPbnuu4preuMKPvmhmStJ6yv
-	public String createPayment(double orderTotal, Order order) {
+	public String createPayment(double orderTotal, Order order, HttpServletRequest request) {
+		String redirectURL = request.getProtocol().substring(0,request.getProtocol().indexOf('/'))
+				+"://"
+				+request.getServerName()
+				+ ":"
+				+ request.getServerPort()
+				+ request.getContextPath()
+				+ "/confirmation";
+		logger.debug("Redirect URL : " + redirectURL);
 		
 		DecimalFormat f = new DecimalFormat("##.00");
 		
@@ -45,7 +54,7 @@ public class PaymentServices {
                         .value(f.format(order.getOrderTotal()))
                         .build())
                 .description(order.getFunctionalId())
-                .redirectUrl(Optional.of(SystemConstants.CONFIRMATION_URL+"?orderId="+order.getFunctionalId()))
+                .redirectUrl(Optional.of(redirectURL+"?orderId="+order.getFunctionalId()))
                 .locale(Optional.of(Locale.nl_NL))
                 .build();
 		// .method(Optional.of(PaymentMethod.IDEAL)) needs to be enabled https://docs.mollie.com/reference/v2/profiles-api/enable-method

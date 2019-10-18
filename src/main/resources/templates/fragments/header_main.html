@@ -24,7 +24,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-3 col-md-6">
                             <div >
-                                <a th:href="@{/home}"><img src="img/logo-sm.png" alt="" style="width:260px; height:41px;"></a>
+                                <a th:href="@{/home}"><img src="img/logo-sm.png" alt="" style="width:245px; height:39px;"></a>
                             </div>
                         </div>
                         <div class="col-lg-9 col-md-12">
@@ -58,13 +58,11 @@
                                                <span class="cart_icon">
                                                    <i class="ion-android-cart"></i>
                                                </span>
-                                               <span class="cart_title" th:if="${shoppingItemsCount>0}">
+                                               <span class="cart_title">
                                                    <input type="hidden" id="item-counts" th:value="${shoppingItemsCount}">
-                                                    <span id ="item-counts-label" class="cart_quantity" th:text="${shoppingItemsCount}+ ' artikel(en)'"></span>
-                                                    <span class="cart_price" th:text="'&euro;'+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
-                                                </span>
-                                                <span class="cart_title" th:if="${shoppingItemsCount==0}">
-                                                        <span class="cart_quantity">0 artikelen</span>                                                        
+                                                    <span id ="item-counts-label" class="cart_quantity" th:if="${shoppingItemsCount} == 1" th:text="${shoppingItemsCount} + ' artikel'"></span>
+                                                    <span id ="item-counts-label" class="cart_quantity" th:if="${shoppingItemsCount} != 1" th:text="${shoppingItemsCount} + ' artikelen'"></span>
+                                                    <span class="cart_price" th:if="${shoppingItemsCount} > 0" th:text="'&euro;'+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
                                                 </span>
                                             </a>
                                             <!--mini cart end-->

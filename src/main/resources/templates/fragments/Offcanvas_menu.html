@@ -10,7 +10,7 @@
                               <a href="javascript:void(0)"><i class="ion-android-close"></i></a>  
                         </div>
                         <div class="header_support">
-                            <p><i class="icon ion-android-alarm-clock"></i> Voor 23:30 bestled, morgen bezorgd! - Support: <a href="tel:+(012)800456789">(012) 800 456 789 </a></p>
+                            <p><i class="icon ion-android-alarm-clock"></i> Voor 23:30 bestled, morgen bezorgd! - Support: <a href="tel:(+31) 685136952">(+31) 685136952 </a></p>
                         </div>
                         <div id="menu" class="text-left ">
                             <ul class="offcanvas_main_menu">
@@ -47,13 +47,12 @@
                                    <span class="cart_icon">
                                        <i class="ion-android-cart"></i>
                                    </span>
-                                   <span class="cart_title" th:if="${shoppingItemsCount>0}">
-                                        <span class="cart_quantity" th:text="${shoppingItemsCount}+ ' item(s)'"></span>
-                                        <span class="cart_price" th:text="' &euro; '+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
-                                    </span>
-                                    <span class="cart_title" th:if="${shoppingItemsCount==0}">
-                                            <span class="cart_quantity">0 artikelen</span>                                                        
-                                    </span>
+                                   <span class="cart_title">
+                                    <input type="hidden" id="item-counts" th:value="${shoppingItemsCount}">
+                                     <span id ="item-counts-label" class="cart_quantity" th:if="${shoppingItemsCount} == 1" th:text="${shoppingItemsCount} + ' artikel'"></span>
+                                     <span id ="item-counts-label" class="cart_quantity" th:if="${shoppingItemsCount} != 1" th:text="${shoppingItemsCount} + ' artikelen'"></span>
+                                     <span class="cart_price" th:if="${shoppingItemsCount} > 0" th:text="'&euro;'+${#numbers.formatDecimal(orderTotal, 0, 'POINT', 2, 'COMMA')}"></span>
+                                 </span>
                                 </a>
                                 <!--mini cart end-->
                                 </div>

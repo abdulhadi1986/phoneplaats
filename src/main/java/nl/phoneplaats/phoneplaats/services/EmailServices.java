@@ -181,10 +181,9 @@ public class EmailServices {
 	                      "<h3>Contact ons</h3>"+    
 	                      "<p>Voor alle vragen kunt u contact opnemen met ons klantservice op de onderstaande contactgegevens of u kunt een drict bericht sturen</p>"+
 	                      "<ul>"+
-	                         "<li>Address : No 40 Baria Sreet 133/2 NewYork City</li>"+
 	                          "<li><a href=\"#\">" + SystemConstants.INFO_EMAIL + "</a></li>"+
 	                          "<li>"+ SystemConstants.INFO_PHONE + "</li>"+
-	                          "<li>"+ SystemConstants.INFO_ADDRESS + "</li>"+
+	                          "<li> Address : "+ SystemConstants.INFO_ADDRESS + "</li>"+
 	                      "</ul>"+             
                       "</div>"+	
                       "</br>"+
