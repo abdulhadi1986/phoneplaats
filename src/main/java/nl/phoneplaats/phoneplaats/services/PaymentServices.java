@@ -80,7 +80,7 @@ public class PaymentServices {
 				logger.error("ERROR",e);
 				logger.debug("deleting order " + order.getFunctionalId());
 				orderRepo.deleteByOrderId(order.getOrderId());
-				return "redirect:shippingInfo?error=PaymentServerError";
+				return "shippingInfo?error=PaymentServerError";
 			}
 	
 	}
