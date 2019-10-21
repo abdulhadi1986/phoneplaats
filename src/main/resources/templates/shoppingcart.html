@@ -87,7 +87,7 @@
 													<input id="availableQty" type="hidden" th:value="${orderDetail.getProduct().getAvailableQty()}">	
 													<input type ="hidden" id ="productId" th:value= "${orderDetail.getProduct().getProductId()}">
 												</td>               
-												<td id="deleteOrderItem" class="border-0 align-middle"><a class="text-dark" href=""><i class="fa fa-trash"></i></a></td>
+												<td id="deleteOrderItem" class="border-0 align-middle"><a class="text-dark" th:href="@{/delorderitem(prodId=${orderDetail.getProduct().getProductId()})}"><i class="fa fa-trash"></i></a></td>
 											</tr>
 										</tbody>
 									</table>
@@ -228,19 +228,19 @@
 					
 				}); 
 				
-				$("td[id*='deleteOrderItem']").click(function () {
-					var prodId = $(this).parent().find("#productId").val();
-					$.ajax({
-					      type : "POST",
-					      contentType : "application/json",
-					      url : window.location + "/deleteFromCartAjax",
-					      data :JSON.stringify(prodId),
-					      dataType : 'json',
-					      success : function(result) {}
-					    });
+				// $("td[id*='deleteOrderItem']").click(function () {
+				// 	var prodId = $(this).parent().find("#productId").val();
+				// 	$.ajax({
+				// 	      type : "POST",
+				// 	      contentType : "application/json",
+				// 	      url : window.location + "/deleteFromCartAjax",
+				// 	      data :JSON.stringify(prodId),
+				// 	      dataType : 'json',
+				// 	      success : function(result) {}
+				// 	    });
 					
-                    $(this).parent().remove();
-                    calculateSubTotal();
+                //     $(this).parent().remove();
+                //     calculateSubTotal();
 					/*
 					console.log('the value of caritems count: '+ $("#shopingCartItems").text());
                     $("#shopingCartItems").text(Number($("#shopingCartItems").text())-1);
@@ -260,7 +260,7 @@
                     
 					*/
                     
-                });
+                // });
 			
 		 /* calculateSubTotal();
 

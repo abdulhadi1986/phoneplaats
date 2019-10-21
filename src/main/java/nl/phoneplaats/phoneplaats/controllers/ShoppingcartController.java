@@ -133,16 +133,19 @@ public class ShoppingcartController {
 	}
 	
 	@RequestMapping(value="/delorderitem", method=RequestMethod.GET)
-	public String deleteOrderItem(@RequestParam (value="prodId", required=true, defaultValue="0")int prodId, Model model) {
+	public String deleteOrderItem(@RequestParam (value="prodId", required=true, defaultValue="0")int prodId, Model model, HttpSession session) {
 		try {
-			Product prod= productDao.getProductById(prodId);
-			for (int i=0; i<shoppingCartItems.size(); i++) {
-				if (shoppingCartItems.get(i).getProduct().equals(prod)) {
-					shoppingCartItems.remove(shoppingCartItems.get(i));
-					i--;
-				}
-			}
-			
+			logger.debug("deleting order : " + prodId);
+			Order order = (Order) session.getAttribute("order");
+			  Product product = new Product();
+			  for (int i = 0 ; i < order.getOrderDetails().size(); i++) { 
+				  if (order.getOrderDetails().get(i).getProduct().getProductId() == prodId) {
+					  product = order.getOrderDetails().get(i).getProduct();
+					  	order.getOrderDetails().remove(i); 
+				  	} 
+				  }
+			  
+			  session.setAttribute("order", order);
 			return "redirect:shoppingcart";
 		}catch (Exception e) {
 			logger.debug("ERROR" , e);
