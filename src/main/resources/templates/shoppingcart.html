@@ -133,14 +133,25 @@
 				</li>
 				</ul>
 			</div>
-			<div class="row">
+			<!-- <div class="row">
 				<div class="col-md-6">
 					<a  th:href="@{/products}" class="btn btn-primary rounded-pill py-2 btn-block">Verder Winkelen</a>
 				</div>
 				<div class="col-md-6">
 					<button id="btncheckout" type="submit" class="btn btn-dark rounded-pill py-2 btn-block" th:if="${shoppingItemsCount} > 0" >Bestellen Afronden</button>	
 				</div>
-			</div> 
+			</div>  -->
+			<div id="formControls" class="product_desc justify-content-center">
+				<a th:href="@{/products}" class="btn btn-outline-secondary m-1"> 
+					<i class="fa fa-search-plus" style="color:gray;"></i>
+					Verder Winkelen
+				</a>
+				<button type="submit"  id="btncheckout" class="btn btn-primary m-1" th:if="${shoppingItemsCount} > 0" > 
+					<i class="fa fa-shopping-bag" style="color:white;"></i>
+					Naar bestellen
+				</button>
+			
+			</div>
 		</div>
 		
 		
