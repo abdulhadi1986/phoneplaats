@@ -44,7 +44,6 @@ public class PaymentServices {
 		
 		Client client = new ClientBuilder()
 	            .withApiKey(SystemConstants.MOLLIE_TEST_KEY)
-	            .withTestMode(true)
 	            .build();
 
 		logger.debug("client for payment is created, now creating payment, amount : "+f.format(order.getOrderTotal()));
@@ -89,8 +88,8 @@ public class PaymentServices {
 	public boolean isPaymentCompleted(Order order) throws MollieException {
 		Client client = new ClientBuilder()
 	            .withApiKey(SystemConstants.MOLLIE_TEST_KEY)
-	            .withTestMode(true)
-	            .withOrganizationToken(SystemConstants.MOLLIE_ACCESS_TOKEN)
+	            //.withTestMode(true)
+	            //.withOrganizationToken(SystemConstants.MOLLIE_ACCESS_TOKEN)
 	            .build();
 		
 		logger.debug("checking the payment with id: "+order.getPaymentId());
