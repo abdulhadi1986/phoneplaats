@@ -29,6 +29,8 @@ public class OrderDetail {
 	@ManyToOne
 	@JoinColumn(name="prod_id")
 	private Product product;
+	@Column(name="selling_price")
+	private double sellingPrice;
 	@Column(name="product_color")
 	private String productColor;
 	@Column(name="quantity")
@@ -59,6 +61,13 @@ public class OrderDetail {
 		this.quantity = quantity;
 	}
 	
+	
+	public double getSellingPrice() {
+		return sellingPrice;
+	}
+	public void setSellingPrice(double sellingPrice) {
+		this.sellingPrice = sellingPrice;
+	}
 	@Override
 	public int hashCode() {
 		final int prime = 31;
