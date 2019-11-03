@@ -90,6 +90,7 @@ public class OrderServices {
 			return;
 		
 		for (OrderDetail orderDetail : orderDetails) {
+			orderDetail.setSellingPrice(orderDetail.getProduct().getProductPrice());
 			orderDetailRepo.save(orderDetail);	
 		}
 		//order.setOrderDetails(orderServices.orderDetailRepo.findByOrderId(order.getOrderId()));

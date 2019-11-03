@@ -81,10 +81,12 @@ CREATE TABLE `orders` (
   KEY `order_cust_fk_idx` (`customer_id`),
   CONSTRAINT `order_cust_fk` FOREIGN KEY (`customer_id`) REFERENCES `customers` (`customer_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 CREATE TABLE `order_details` (
   `order_detail_id` int(11) NOT NULL,
   `order_id` int(11) DEFAULT NULL,
   `prod_id` int(11) DEFAULT NULL,
+  `selling_price` double DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
   `product_color` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`order_detail_id`),
@@ -93,4 +95,3 @@ CREATE TABLE `order_details` (
   CONSTRAINT `FKj2yiyprjyi62xp0x965rbpd9` FOREIGN KEY (`prod_id`) REFERENCES `products` (`prod_id`),
   CONSTRAINT `detail_order_fk` FOREIGN KEY (`order_id`) REFERENCES `orders` (`order_id`) ON DELETE CASCADE ON UPDATE NO ACTION
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-

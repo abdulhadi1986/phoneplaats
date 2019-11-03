@@ -63,18 +63,18 @@ public class PaymentServices {
 			//epaymentRequest.setProfileId(Optional.of("pfl_DPxajhSzEr"));
 			try {
 				PaymentResponse paymentResponse = client.payments().createPayment(paymentRequest);			
-			order.setStatus(paymentResponse.getStatus());
-			logger.debug("payment status for the order: "+ order.getStatus());
-			
-			order.setPaymentId(paymentResponse.getId());
-			logger.debug("payment id for the order : " + order + " , " + order.getPaymentId());
-			order.setOrderDate(LocalDateTime.now());
-			logger.debug("saving order to DB ..");
-			orderRepo.save(order);
+				order.setStatus(paymentResponse.getStatus());
+				logger.debug("payment status for the order: "+ order.getStatus());
+				
+				order.setPaymentId(paymentResponse.getId());
+				logger.debug("payment id for the order : " + order + " , " + order.getPaymentId());
+				order.setOrderDate(LocalDateTime.now());
+				logger.debug("saving order to DB ..");
+				orderRepo.save(order);
 
-			logger.debug("the payment : " + paymentResponse.getStatus() + " " +paymentResponse.getAmount()+" "+paymentResponse.getLinks().getStatus());
-			logger.debug("the link : "+paymentResponse.getLinks().getCheckout().getHref());
-			return paymentResponse.getLinks().getCheckout().getHref();		
+				logger.debug("the payment : " + paymentResponse.getStatus() + " " +paymentResponse.getAmount()+" "+paymentResponse.getLinks().getStatus());
+				logger.debug("the link : "+paymentResponse.getLinks().getCheckout().getHref());
+				return paymentResponse.getLinks().getCheckout().getHref();		
 			
 			}catch (MollieException e) {
 				logger.error("ERROR",e);
