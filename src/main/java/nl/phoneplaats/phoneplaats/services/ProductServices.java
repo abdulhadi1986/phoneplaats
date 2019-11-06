@@ -8,6 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import nl.phoneplaats.phoneplaats.dao.InventoryDao;
 import nl.phoneplaats.phoneplaats.dao.ProductDao;
 import nl.phoneplaats.phoneplaats.dto.Category;
 import nl.phoneplaats.phoneplaats.dto.Product;
@@ -25,16 +27,19 @@ public class ProductServices {
 	@Autowired
 	private InventoryRepo inventoryRepo;
 	@Autowired
-	private CategoryRepo categoryRepo;
-	
+	private CategoryRepo categoryRepo;	
 	@Autowired
 	private ProductRepo productRepo;
+	@Autowired
+	private InventoryDao inventoryDao;
 	
 	private static final Logger logger = LoggerFactory.getLogger(ProductServices.class);
 	
 	public Product setProductInfo(int productId) {
 		Product product = new Product();
 		product = productDao.getProductById(productId);
+		if (product == null)
+			return null;
 		product.setProductImages(imageRepo.findByProduct(product));
 		setProductQuantity(product);
 		return product;
@@ -47,7 +52,7 @@ public class ProductServices {
 	public Map<Category, List<Product>> getAllCategoriesAndProducts(){
 		Map<Category, List<Product>> categoriesAndProducts = new HashMap<>();
 		for (Category cat : categoryRepo.findAll()) {
-			List<Product> productList= productRepo.findByProductCategory(cat);
+			List<Product> productList= inventoryDao.getAllProducts(cat.getCategoryId());
 			if (productList != null) {
 				categoriesAndProducts.put(cat,productList);
 			}

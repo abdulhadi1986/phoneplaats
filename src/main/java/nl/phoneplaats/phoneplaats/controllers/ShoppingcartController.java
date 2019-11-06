@@ -162,8 +162,9 @@ public class ShoppingcartController {
 			  logger.debug("adding product to order" + order.getOrderDetails());
 			  if (order.getOrderDetails().size()==0) {
 				  logger.debug("No product to be added ");
-				  return "redirect:shoppingcart";
+				  return "redirect:products";
 			  }
+			  
 			  this.order.setOrderDetails(order.getOrderDetails());
 			  session.setAttribute("order", this.order);
 			  		 		  

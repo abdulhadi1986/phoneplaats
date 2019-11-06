@@ -23,6 +23,8 @@ public class ProductDao {
 	public Product getProductById(int productId) {
 		Product product=new Product();
 		product = productRepo.findByProductId(productId);
+		if (product == null)
+			return null;
 		setProductImages(product);
 		productRepo.save(product);
 		return product;

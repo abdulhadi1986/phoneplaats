@@ -71,8 +71,10 @@ public class ProductController implements ErrorController{
 												,HttpSession session) {
 		
 		try {
-			generalServices.setPageHeader(model, session);
+			generalServices.setPageHeader(model, session);			
 			Product product = productServices.setProductInfo(prodId);
+			if (product == null || inventoryDao.getProductInventory(product) < 1)
+				return "redirect:/home";
 			model.addAttribute("product", product);
 			logger.debug("getting product details: "+ product.getProductName());
 			if(error == 1) {

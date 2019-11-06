@@ -126,6 +126,10 @@ public class OrderServices {
 		//set the order date 
 		order.setOrderDate(LocalDateTime.now());
 		
+		for (OrderDetail orderItem: order.getOrderDetails()) {
+			orderItem.setSellingPrice(orderItem.getProduct().getProductPrice());
+		}
+		
 		//save order to database 
 		logger.debug("saving order with status OPEN");
 		orderRepo.save(order);
