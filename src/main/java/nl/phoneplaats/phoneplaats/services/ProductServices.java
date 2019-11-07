@@ -41,7 +41,7 @@ public class ProductServices {
 		if (product == null)
 			return null;
 		product.setProductImages(imageRepo.findByProduct(product));
-		setProductQuantity(product);
+		//setProductQuantity(product);
 		return product;
 	}
 	

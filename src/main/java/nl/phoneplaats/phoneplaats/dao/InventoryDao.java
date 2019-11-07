@@ -13,18 +13,27 @@ import nl.phoneplaats.phoneplaats.repo.InventoryRepo;
 public class InventoryDao {
 	@Autowired
 	private InventoryRepo inventoryRepo;
+	@Autowired
+	private ProductDao productDao;
 	
 	public List<Product> getAllProducts(int categoryId){
 		List<Product> allProducts=new ArrayList<>();
 		
-		inventoryRepo.findAll().stream().filter(p->p.getStockQuantity()>0).forEach(inv->allProducts.add(inv.getProduct()));
-		if (categoryId==0)
-			return allProducts;
-		for (int i =0; i<allProducts.size();i++) {
-			if (allProducts.get(i).getProductCategory().getCategoryId()!=categoryId) {
-				allProducts.remove(i);
-				i--;
+		inventoryRepo.findAll()
+						.stream()
+						.filter(p->p.getStockQuantity()>0)
+							.forEach((inv)->allProducts.add(inv.getProduct()));
+		if (categoryId!=0) {			
+			for (int i =0; i<allProducts.size();i++) {
+				if (allProducts.get(i).getProductCategory().getCategoryId()!=categoryId) {
+					allProducts.remove(i);
+					i--;
+				}
 			}
+		}
+		for (Product product:allProducts) {
+			productDao.setProductImages(product);
+			product.setAvailableQty(getProductInventory(product));
 		}
 		return allProducts;
 	}

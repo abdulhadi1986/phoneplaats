@@ -46,13 +46,13 @@ public class ProductController implements ErrorController{
 								,@RequestParam(value="categoryId", required=false, defaultValue="0") int categoryId, ServletRequest request) {
 		
 		generalServices.setPageHeader(model, session);
-		List<Product> allProducts = new ArrayList<>();
 		
-		for (Product product:inventoryDao.getAllProducts(categoryId)) {
-			productDao.setProductImages(product);
-			allProducts.add(product);
+		if (session.getAttribute("availableProducts") == null) {
+			session.setAttribute("availableProducts", inventoryDao.getAllProducts(categoryId));
 		}
 		
+		List<Product> allProducts = (List) session.getAttribute("availableProducts");
+		logger.debug("available : " + allProducts);
 		model.addAttribute("allProducts", allProducts);		
 		
 		return "home";		
@@ -65,7 +65,9 @@ public class ProductController implements ErrorController{
 				
 		generalServices.setPageHeader(model, session);			
 		Product product = productServices.setProductInfo(prodId);
-		if (product == null || inventoryDao.getProductInventory(product) < 1)
+		product.setAvailableQty(generalServices.getProductInventory(product, session));
+		
+		if (product == null || product.getAvailableQty() < 1)
 			return "redirect:/home";
 		model.addAttribute("product", product);
 		logger.debug("getting product details: "+ product.getProductName());

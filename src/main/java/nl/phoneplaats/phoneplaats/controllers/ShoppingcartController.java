@@ -80,7 +80,11 @@ public class ShoppingcartController {
 		generalServices.setPageHeader(model, session);
 		setSessionVariables(session);
 		shoppingCartItems = order.getOrderDetails();
-		model.addAttribute("order", this.order);
+		
+		for (OrderDetail prod : order.getOrderDetails()) {
+			prod.getProduct().setAvailableQty(inventoryDao.getProductInventory(prod.getProduct()));			
+		}
+		model.addAttribute("order", order);
 		
 		orderServices.setOrderTotal(order, shoppingCartItems);
 		
@@ -98,7 +102,7 @@ public class ShoppingcartController {
 		
 		shoppingCartItems = order.getOrderDetails()!=null?order.getOrderDetails():new ArrayList<>();
 		//check if the ordered quantity is correct
-		if (quantity <=0 && quantity > inventoryDao.getProductInventory(product)) {
+		if (quantity <=0 || quantity > generalServices.getProductInventory(product, session)) {
 			logger.debug("the user entered invalid quantity while it is not allowed : " + quantity + " ,available qty: "+inventoryDao.getProductInventory(product) );
 			return "redirect:productDetails?prodId="+product.getProductId()+"&error=1";
 		}
@@ -107,8 +111,21 @@ public class ShoppingcartController {
 		
 		//set the full information about the product before adding it to the order
 		Product prod= productServices.setProductInfo(product.getProductId());
+		
 		orderItem.setProduct(prod);
 		orderItem.setQuantity(quantity);
+		logger.debug("Product added : " + orderItem.getProduct());
+		List<Product> allProducts = (List<Product>) session.getAttribute("availableProducts");
+		allProducts.remove(orderItem.getProduct());
+		logger.debug("product removed from the list  " + allProducts);
+		orderItem.getProduct().setAvailableQty(orderItem.getProduct().getAvailableQty()- quantity);
+		if (orderItem.getProduct().getAvailableQty() > 0) {
+			logger.debug("Prod qty adjusted" + orderItem.getProduct());
+			allProducts.add(orderItem.getProduct());
+		}		
+		session.setAttribute("availableProducts", allProducts);
+		logger.debug("product added from the list  " + (List<Product>) session.getAttribute("availableProducts"));
+		
 		
 		generalServices.addItemToShoppingcart(shoppingCartItems, orderItem);
 					

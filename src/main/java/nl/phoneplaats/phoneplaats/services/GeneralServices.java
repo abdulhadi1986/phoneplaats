@@ -11,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
+import nl.phoneplaats.phoneplaats.dao.InventoryDao;
 import nl.phoneplaats.phoneplaats.dto.Category;
+import nl.phoneplaats.phoneplaats.dto.Inventory;
 import nl.phoneplaats.phoneplaats.dto.Order;
 import nl.phoneplaats.phoneplaats.dto.OrderDetail;
 import nl.phoneplaats.phoneplaats.dto.Product;
@@ -22,6 +24,8 @@ public class GeneralServices {
 	private ProductServices productServices;
 	@Autowired
 	private OrderServices orderServices;
+	@Autowired
+	private InventoryDao inventoryDao;
 	
 	private static final Logger logger = LoggerFactory.getLogger(GeneralServices.class);
 	
@@ -66,5 +70,16 @@ public class GeneralServices {
 		logger.debug("shopping cart now : " + shoppingCartItems);
 	}
 	
-
+	public int getProductInventory(Product product, HttpSession session) {
+		if (session.getAttribute("availableProducts") == null) {
+			session.setAttribute("availableProducts", inventoryDao.getAllProducts(0));
+		}
+		List<Product> allProducts = (List<Product>) session.getAttribute("availableProducts");
+		int returnedInv=0;
+		for (Product prod : allProducts) {
+			if (prod.getProductId() == product.getProductId())
+				returnedInv = prod.getAvailableQty();	
+		}
+		return returnedInv;
+	}
 }
