@@ -44,92 +44,68 @@ public class ProductController implements ErrorController{
 	public String getAllProducts(Model model 
 								, HttpSession session
 								,@RequestParam(value="categoryId", required=false, defaultValue="0") int categoryId, ServletRequest request) {
-		try {
-			logger.debug("REDIRECT URL: " + request.getProtocol().substring(0,request.getProtocol().indexOf('/'))+"://"+request.getServerName()+ ":"+ request.getServerPort()+"/confirmation?orderId=");
-			generalServices.setPageHeader(model, session);
-			List<Product> allProducts = new ArrayList<>();
-			
-			for (Product product:inventoryDao.getAllProducts(categoryId)) {
-				productDao.setProductImages(product);
-				allProducts.add(product);
-			}
-			
-			model.addAttribute("allProducts", allProducts);		
-			
-			return "home";
-			
-		}catch(Exception e) {
-			logger.debug("ERROR", e);
-			return "error";
+		
+		generalServices.setPageHeader(model, session);
+		List<Product> allProducts = new ArrayList<>();
+		
+		for (Product product:inventoryDao.getAllProducts(categoryId)) {
+			productDao.setProductImages(product);
+			allProducts.add(product);
 		}
 		
+		model.addAttribute("allProducts", allProducts);		
+		
+		return "home";		
 	}
 	
 	@RequestMapping(value="/productDetails", method=RequestMethod.GET)
 	public String getProductDetails(Model model, @RequestParam(value="prodId", required=true) int prodId,
 												@RequestParam(value="error", required=false, defaultValue="0") int error
 												,HttpSession session) {
-		
-		try {
-			generalServices.setPageHeader(model, session);			
-			Product product = productServices.setProductInfo(prodId);
-			if (product == null || inventoryDao.getProductInventory(product) < 1)
-				return "redirect:/home";
-			model.addAttribute("product", product);
-			logger.debug("getting product details: "+ product.getProductName());
-			if(error == 1) {
-				model.addAttribute("quantityerror", "Het aantal beschikbare artikelen op dit moment is("
-						+ inventoryDao.getProductInventory(product)+")");
 				
-			}
-					
-			model.addAttribute("formattedSpec", productServices.getFormattedSpec(product));
-							
-			return "productDetails";
+		generalServices.setPageHeader(model, session);			
+		Product product = productServices.setProductInfo(prodId);
+		if (product == null || inventoryDao.getProductInventory(product) < 1)
+			return "redirect:/home";
+		model.addAttribute("product", product);
+		logger.debug("getting product details: "+ product.getProductName());
+		if(error == 1) {
+			model.addAttribute("quantityerror", "Het aantal beschikbare artikelen op dit moment is("
+					+ inventoryDao.getProductInventory(product)+")");
 			
-		}catch(Exception e) {
-			logger.debug("ERROR", e);
-			return "error";
 		}
-		
+				
+		model.addAttribute("formattedSpec", productServices.getFormattedSpec(product));
+						
+		return "productDetails";		
 	}
 	
 	@RequestMapping(value="/contact", method=RequestMethod.GET)
 	public String getContactUs(Model model , HttpSession session, @RequestParam(value="message", required=false, defaultValue="") String message) {
-		try {
-			generalServices.setPageHeader(model, session);
-			String messageParam="";
-			String errorMessage="";
-			if (message.contentEquals("sent")) {
-				messageParam= "Uw message is verzonden. U krijgt een reactie van ons z.s.m.";
-			}else if (message.equals("messinginfo")) {
-				logger.debug("sedning messge from contact us page failed because of empty fields");
-				errorMessage= "Alle velden moet ingevuld worden!";
-			}
-			
-			model.addAttribute("messageParam", messageParam);
-			model.addAttribute("errorMessage", errorMessage);
-			return "contact-ons";
-			
-		}catch(Exception e) {
-			logger.debug("ERROR", e);
-			return "error";
-		}	
+		
+		generalServices.setPageHeader(model, session);
+		String messageParam="";
+		String errorMessage="";
+		if (message.contentEquals("sent")) {
+			messageParam= "Uw message is verzonden. U krijgt een reactie van ons z.s.m.";
+		}else if (message.equals("messinginfo")) {
+			logger.debug("sedning messge from contact us page failed because of empty fields");
+			errorMessage= "Alle velden moet ingevuld worden!";
+		}
+		
+		model.addAttribute("messageParam", messageParam);
+		model.addAttribute("errorMessage", errorMessage);
+		return "contact-ons";	
 		
 	}
 	
 	@RequestMapping(value="/sendContactMessage" , method=RequestMethod.POST)
 	public String sendMessageFromContact(String name, String email, String subject, String message) {
-		try {
-			if(name.trim().isEmpty() || email.trim().isEmpty()||subject.trim().isEmpty() || message.trim().isEmpty())
-				return "redirect:/contact?message=messinginfo";
-			EmailServices.sendEmailFromContactPage(name, email, subject, message);
-			return "redirect:/contact?message=sent";
-		}catch(Exception e) {
-			logger.debug("ERROR", e);
-			return "error";
-		}	
 		
+		if(name.trim().isEmpty() || email.trim().isEmpty()||subject.trim().isEmpty() || message.trim().isEmpty())
+			return "redirect:/contact?message=messinginfo";
+		EmailServices.sendEmailFromContactPage(name, email, subject, message);
+		return "redirect:/contact?message=sent";		
 	}
 	
 	@GetMapping("/overons")

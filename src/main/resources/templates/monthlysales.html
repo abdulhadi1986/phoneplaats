@@ -70,11 +70,11 @@
 							<h4 th:text="${order.getOrder().getFunctionalId()}"></h4>
 						</div>
 					</th>
-					<td id="productPrice" class="border-0 align-middle" th:text="${order.getOrder().getOrderDate()}"><strong>price</strong></td>
-					<td id="productPrice" class="border-0 align-middle" th:text="${order.getProduct().getProductName()}"><strong>price</strong></td>
-					<td id="productPrice" class="border-0 align-middle" th:text="${order.getQuantity()}"><strong>price</strong></td>
-					<td id="productPrice" class="border-0 align-middle" th:text="' &euro; '+${#numbers.formatDecimal(order.getProduct().getProductPrice(), 0, 'POINT', 2, 'COMMA')}"><strong>price</strong></td>
-					<td id="productPrice" class="border-0 align-middle" th:text="${order.getOrder().getOrderTotal()}"><strong>price</strong></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getOrder().getOrderDate()}"></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getProduct().getProductName()}"></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getQuantity()}"></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="' &euro; '+${#numbers.formatDecimal(order.getSellingPrice(), 0, 'POINT', 2, 'COMMA')}"></td>
+					<td id="productPrice" class="border-0 align-middle" th:text="${order.getOrder().getOrderTotal()}"></td>
 				</tr>
 			</tbody>
 		</table>

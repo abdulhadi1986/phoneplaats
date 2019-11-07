@@ -111,11 +111,17 @@
 								<input id="availableQty" type="hidden" th:value="${product.getAvailableQty()}">	
 							</div>
 							<div><p class="text-danger" th:text="${quantityerror}"></p></div>
-							<div id="formControls" class="product_desc">
-								<button type="submit" id="addToCart" class="btn btn-primary">Toevoegen aan winkelwagen 
-									<i class="fa fa-shopping-cart" style="color:white;"></i>
+							<div id="formControls" class=" product_desc">
+								<button type="submit" id="addToCart" class="btn btn-primary m-1"> 
+									<i class="fa fa-cart-plus" style="color:white;"></i>
+									In winkelwagen
 								</button>
-								<a th:href="@{/products}" class="btn btn-outline-secondary">Terug</a>
+							<!-- </div> -->
+							<!-- <div id="formControls2" class=" col-md-6"> -->
+								<a th:href="@{/products}" class="btn btn-outline-secondary m-1"> 
+									<i class="fa fa-undo" style="color:gray;"></i>
+									Naar producten
+								</a>
 							</div>
 							<div id="promoInfo" class="bg-light">
 								</br>
@@ -145,10 +151,10 @@
 							<div class="product_d_inner">   
 								<div class="product_info_button">    
 									<ul class="nav" role="tablist">
-										<li >
-											<a class="active" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Specificaties   |</a>
+										<li class="border-right m-2">
+											<a class="active" data-toggle="tab" href="#info" role="tab" aria-controls="info" aria-selected="false">Specificaties</a>
 										</li>
-										<li>
+										<li class="m-2">
 											<a data-toggle="tab" href="#sheet" role="tab" aria-controls="sheet" aria-selected="false">Extra informatie</a>
 									   </li>										
 									</ul>
@@ -202,14 +208,18 @@
     	$(".carousel-item").first().addClass("active");
     	
     	$("#quantityMin").click(function() {
-    		if($("#quantityInput").val()-1 >0){
+    		if(Number($("#quantityInput").val())-1 >0){
     			$("#quantityInput").val(Number($("#quantityInput").val())-1);
     		}else{$("#quantityInput").val(1)}
     	});
     	
-    	$("#quantityPlus").click(function() {    		
-    		if($("#quantityInput").val() < $("#availableQty").val()){
+    	$("#quantityPlus").click(function() {   
+			console.log('available qty : '+ $("#availableQty").val()); 		
+    		if(Number($("#quantityInput").val()) < Number($("#availableQty").val())){
+				console.log('increasing value from ' + $("#quantityInput").val());
     			$("#quantityInput").val(Number($("#quantityInput").val())+1);
+				
+				
     		}
     	}); 
     		

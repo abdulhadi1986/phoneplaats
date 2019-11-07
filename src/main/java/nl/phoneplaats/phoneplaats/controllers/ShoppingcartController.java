@@ -73,106 +73,88 @@ public class ShoppingcartController {
 	@RequestMapping(value="/shoppingcart", method=RequestMethod.GET)
 	public String getShoppingCartPage(Model model, HttpSession session) {
 		
-		try {
-			Order order = (Order) session.getAttribute("order");
-			if (order == null || order.getOrderDetails()==null) {
-				return "redirect:/products";
-			}
-			generalServices.setPageHeader(model, session);
-			setSessionVariables(session);
-			shoppingCartItems = order.getOrderDetails();
-			model.addAttribute("order", this.order);
-			
-			orderServices.setOrderTotal(order, shoppingCartItems);
-			
-			model.addAttribute("orderSubtotal", order.getOrderTotal());
-			model.addAttribute("shippingCost", 0);
-			model.addAttribute("total", order.getOrderTotal());
-			logger.debug("Getting ShoppingCart" + shoppingCartItems);
-			return "shoppingcart";
-		}catch (Exception e) {
-			logger.debug("ERROR" , e);
-			return "error";
+		Order order = (Order) session.getAttribute("order");
+		if (order == null || order.getOrderDetails()==null) {
+			return "redirect:/products";
 		}
+		generalServices.setPageHeader(model, session);
+		setSessionVariables(session);
+		shoppingCartItems = order.getOrderDetails();
+		model.addAttribute("order", this.order);
 		
+		orderServices.setOrderTotal(order, shoppingCartItems);
+		
+		model.addAttribute("orderSubtotal", order.getOrderTotal());
+		model.addAttribute("shippingCost", 0);
+		model.addAttribute("total", order.getOrderTotal());
+		logger.debug("Getting ShoppingCart" + shoppingCartItems);
+		return "shoppingcart";
+				
 	}
 
 	@RequestMapping(value="/addToShoppingCart" , method=RequestMethod.POST)
 	public String addToShoppingCart(Model model, Product product, int quantity, HttpSession session) {
-		try {
-			setSessionVariables(session);
-			
-			shoppingCartItems = order.getOrderDetails()!=null?order.getOrderDetails():new ArrayList<>();
-			//check if the ordered quantity is correct
-			if (quantity <=0 && quantity > inventoryDao.getProductInventory(product)) {
-				logger.debug("the user entered invalid quantity while it is not allowed : " + quantity + " ,available qty: "+inventoryDao.getProductInventory(product) );
-				return "redirect:productDetails?prodId="+product.getProductId()+"&error=1";
-			}
-			
-			OrderDetail orderItem = new OrderDetail();
-			
-			//set the full information about the product before adding it to the order
-			Product prod= productServices.setProductInfo(product.getProductId());
-			orderItem.setProduct(prod);
-			orderItem.setQuantity(quantity);
-			
-			generalServices.addItemToShoppingcart(shoppingCartItems, orderItem);
-						
-			order.setOrderDetails(shoppingCartItems);
-			
-			orderServices.setOrderTotal(order, shoppingCartItems);
-
-			session.setAttribute("order", order);
-			
-			return "redirect:shoppingcart";	
-		}catch (Exception e) {
-			logger.debug("ERROR" , e);
-			return "error";
+		setSessionVariables(session);
+		
+		shoppingCartItems = order.getOrderDetails()!=null?order.getOrderDetails():new ArrayList<>();
+		//check if the ordered quantity is correct
+		if (quantity <=0 && quantity > inventoryDao.getProductInventory(product)) {
+			logger.debug("the user entered invalid quantity while it is not allowed : " + quantity + " ,available qty: "+inventoryDao.getProductInventory(product) );
+			return "redirect:productDetails?prodId="+product.getProductId()+"&error=1";
 		}
-			
+		
+		OrderDetail orderItem = new OrderDetail();
+		
+		//set the full information about the product before adding it to the order
+		Product prod= productServices.setProductInfo(product.getProductId());
+		orderItem.setProduct(prod);
+		orderItem.setQuantity(quantity);
+		
+		generalServices.addItemToShoppingcart(shoppingCartItems, orderItem);
+					
+		order.setOrderDetails(shoppingCartItems);
+		
+		orderServices.setOrderTotal(order, shoppingCartItems);
+
+		session.setAttribute("order", order);
+		
+		return "redirect:shoppingcart";	
+					
 	}
 	
 	@RequestMapping(value="/delorderitem", method=RequestMethod.GET)
 	public String deleteOrderItem(@RequestParam (value="prodId", required=true, defaultValue="0")int prodId, Model model, HttpSession session) {
-		try {
-			logger.debug("deleting order : " + prodId);
-			Order order = (Order) session.getAttribute("order");
-			  Product product = new Product();
-			  for (int i = 0 ; i < order.getOrderDetails().size(); i++) { 
-				  if (order.getOrderDetails().get(i).getProduct().getProductId() == prodId) {
-					  product = order.getOrderDetails().get(i).getProduct();
-					  	order.getOrderDetails().remove(i); 
-				  	} 
-				  }
-			  
-			  session.setAttribute("order", order);
-			return "redirect:shoppingcart";
-		}catch (Exception e) {
-			logger.debug("ERROR" , e);
-			return "error";
-		}
-		
+		logger.debug("deleting order : " + prodId);
+		Order order = (Order) session.getAttribute("order");
+			Product product = new Product();
+			for (int i = 0 ; i < order.getOrderDetails().size(); i++) { 
+				if (order.getOrderDetails().get(i).getProduct().getProductId() == prodId) {
+					product = order.getOrderDetails().get(i).getProduct();
+					order.getOrderDetails().remove(i); 
+				} 
+				}
+			
+			session.setAttribute("order", order);
+		return "redirect:shoppingcart";
+				
 		
 	}
 	
 	
 	  @RequestMapping(value="/addProductsToOrder", method=RequestMethod.POST)
 	  public String addProductsToOrder(@ModelAttribute Order order, HttpSession session) { 
-		  try {
-			  logger.debug("adding product to order" + order.getOrderDetails());
-			  if (order.getOrderDetails().size()==0) {
-				  logger.debug("No product to be added ");
-				  return "redirect:products";
-			  }
-			  
-			  this.order.setOrderDetails(order.getOrderDetails());
-			  session.setAttribute("order", this.order);
-			  		 		  
-			  return"redirect:shippingInfo"; 
-		  }catch (Exception e) {
-				logger.debug("ERROR" , e);
-				return "error";
+
+		logger.debug("adding product to order" + order.getOrderDetails());
+		if (order.getOrderDetails().size()==0) {
+			logger.debug("No product to be added ");
+			return "redirect:products";
 		}
+		
+		this.order.setOrderDetails(order.getOrderDetails());
+		session.setAttribute("order", this.order);
+						
+		return"redirect:shippingInfo"; 
+		  
 		  
 	  }
 	  
@@ -181,50 +163,45 @@ public class ShoppingcartController {
 	  public String checkout(Model model
 			  		, HttpSession session
 			  		,@RequestParam(value="error", required=false, defaultValue="")String error) {
-		try {
-			Order order = (Order) session.getAttribute("order");
-			generalServices.setPageHeader(model, session);
-			if (order.getOrderDetails().size()==0) {
-				return "redirect:products";
-			}
-			
-			orderServices.setOrderTotal(order, order.getOrderDetails());
-			order.setShippingCost(0.00d);
-			//OrderServices.setShippingCost(0.00);
-			
-			Customer customer = new Customer();
-			String errorMessage="";
-			if(!error.isEmpty()) {
-				if(error.equals("PersonalInfoError")) {
-					errorMessage = "Er is een fout in uw gegevens! Controleer uw gegevens en probeer het nog een keer";
-
-				}else if (error.equals("PaymentError")) {
-					errorMessage = "Er is een fout opgetreden de betaling server, probeer het nog een keer";	
-				}else if (error.equals("PaymentServerError")){
-					errorMessage = "Er is een fout opgetreden de betaling server, probeer het nog een keer";	
-				}else {
-					errorMessage = "Er is een onbekende fout opgetreden! probeer het nog een keer.";
-				}
-				customer = order.getCustomer();
-				model.addAttribute("errorMessage", errorMessage);
-			}
-			order.setCustomer(customer);
-			
-			session.setAttribute("order", order);
-
-			model.addAttribute("customer", customer);		
-			model.addAttribute("orderSubtotal", order.getOrderTotal());
-			model.addAttribute("shippingCost", order.getShippingCost());
-			model.addAttribute("total", order.getOrderTotal());
-			model.addAttribute("errorMessage", errorMessage);
-			
-		  
-		  return"shippinginfo"; 
-		}catch (Exception e) {
-			logger.debug("ERROR" , e);
-			return "error";
+		Order order = (Order) session.getAttribute("order");
+		generalServices.setPageHeader(model, session);
+		if (order.getOrderDetails().size()==0) {
+			return "redirect:products";
 		}
 		
+		orderServices.setOrderTotal(order, order.getOrderDetails());
+		order.setShippingCost(0.00d);
+		//OrderServices.setShippingCost(0.00);
+		
+		Customer customer = new Customer();
+		String errorMessage="";
+		if(!error.isEmpty()) {
+			if(error.equals("PersonalInfoError")) {
+				errorMessage = "Er is een fout in uw gegevens! Controleer uw gegevens en probeer het nog een keer";
+
+			}else if (error.equals("PaymentError")) {
+				errorMessage = "Er is een fout opgetreden de betaling server, probeer het nog een keer";	
+			}else if (error.equals("PaymentServerError")){
+				errorMessage = "Er is een fout opgetreden de betaling server, probeer het nog een keer";	
+			}else {
+				errorMessage = "Er is een onbekende fout opgetreden! probeer het nog een keer.";
+			}
+			customer = order.getCustomer();
+			model.addAttribute("errorMessage", errorMessage);
+		}
+		order.setCustomer(customer);
+		
+		session.setAttribute("order", order);
+
+		model.addAttribute("customer", customer);		
+		model.addAttribute("orderSubtotal", order.getOrderTotal());
+		model.addAttribute("shippingCost", order.getShippingCost());
+		model.addAttribute("total", order.getOrderTotal());
+		model.addAttribute("errorMessage", errorMessage);
+		
+		
+		return"shippinginfo"; 
+				
 	  }	 
 	
 	@Transactional
@@ -234,48 +211,41 @@ public class ShoppingcartController {
 							,String extraNotes
 							,String bankInfo
 							,HttpServletRequest request) {
-		try {
-			Order order = (Order) session.getAttribute("order");
-			
-			//check the info filled by the customer
-			if (!CustomerServices.isValidCustomer(customer)) {
-				return "redirect:shippingInfo?error=PersonalInfoError";
-			}
-			
-			//fill in all required order data 
-			try {
-				orderServices.setCustomerInfo(order, customer);
-				orderServices.perpareOrderForPayment(order);
-				
-			}catch (Exception e) {
-				logger.error("Error preparing order "+ e);
-				return "redirect:shippingInfo?error=OtherError";
-			}
-			
-			String returnedURL="";
-			
-			try {
-				
-			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order, request);
-			
-			}catch (Exception e) {
-				logger.error("another Error creating payament" + e);
-				e.printStackTrace();
-				logger.debug("deleting order " + order.getFunctionalId());
-				orderRepo.deleteByOrderId(order.getOrderId());
-				return "redirect:shippingInfo?error=OtherError";
-			}	
-			
-			session.setAttribute("orderFunctionalId", order.getFunctionalId());
-			
-
-			logger.debug("payment succeeded: now redirecting");
-			return "redirect:"+returnedURL;
-		}catch (Exception e) {
-			logger.debug("ERROR" , e);
-			return "error";
+		Order order = (Order) session.getAttribute("order");
+		
+		//check the info filled by the customer
+		if (!CustomerServices.isValidCustomer(customer)) {
+			return "redirect:shippingInfo?error=PersonalInfoError";
 		}
 		
+		//fill in all required order data 
+		try {
+			orderServices.setCustomerInfo(order, customer);
+			orderServices.perpareOrderForPayment(order);
+			
+		}catch (Exception e) {
+			logger.error("Error preparing order "+ e);
+			return "redirect:shippingInfo?error=OtherError";
+		}
+		
+		String returnedURL="";
+		try{
+			returnedURL = paymentServices.createPayment(order.getOrderTotal()+order.getShippingCost(), order, request);
+			
+		}catch (Exception e) {
+			logger.error("another Error creating payament" + e);
+			e.printStackTrace();
+			logger.debug("deleting order " + order.getFunctionalId());
+			orderRepo.deleteByOrderId(order.getOrderId());
+			return "redirect:shippingInfo?error=OtherError";
+		}	
+		
+		session.setAttribute("orderFunctionalId", order.getFunctionalId());
+		
+
+		logger.debug("payment succeeded: now redirecting");
+		return "redirect:"+returnedURL;
+				
 				
 	}
 	
@@ -284,52 +254,46 @@ public class ShoppingcartController {
 	public String getConfirmation(@RequestParam(name="orderId", required=true)String orderId
 									, Model model
 									,HttpSession session) {
-		try {
-			Order order = orderRepo.findByFunctionalId(orderId);
-			generalServices.setPageHeader(model, session);
-			boolean isPaymentSuccessful=false;
-			
-			try {
-				if(paymentServices.isPaymentCompleted(order)) {
-					isPaymentSuccessful = true;
-					logger.debug("payment is successfull" + order.getPaymentId());
-					logger.debug("clearing user's session");
-					session.removeAttribute("order");
-					
-				}
-			} catch (MollieException e) {
-				logger.error("Error getting payament info" + order.getFunctionalId() + " , " + order.getPaymentId());
-				EmailServices.sendEmailForConfirmationFailure(order);
-				e.printStackTrace();
+		Order order = orderRepo.findByFunctionalId(orderId);
+		generalServices.setPageHeader(model, session);
+		boolean isPaymentSuccessful=false;
+		try{
+			if(paymentServices.isPaymentCompleted(order)) {
+				isPaymentSuccessful = true;
+				logger.debug("payment is successfull" + order.getPaymentId());
+				logger.debug("clearing user's session");
+				session.removeAttribute("order");
 				
 			}
-			if (!isPaymentSuccessful) {
-				logger.debug("payment with id " + order.getPaymentId() + " was not successfull");
-				return "redirect:shippingInfo?error=PaymentError";
-			}
-		
-			try {
-				EmailServices.sendOrderConfirmationToCustomer(order);
-				EmailServices.sendOrderToSeller(order);			
-			} catch (MessagingException e) {
-				logger.error("ERROR happened while sending email for confirmation", e);
-				e.printStackTrace();
-			} catch (IOException e) {
-				logger.error("ERROR happened while sending email", e);
-				e.printStackTrace();
-			}
+		} catch (MollieException e) {
+			logger.error("Error getting payament info" + order.getFunctionalId() + " , " + order.getPaymentId());
+			EmailServices.sendEmailForConfirmationFailure(order);
+			e.printStackTrace();
 			
-			model.addAttribute("order", order);
-			inventoryServices.updateQuantityAfterOrder(order);
-			order.setStatus("Paid");
-			orderRepo.save(order);
-					
-			return "confirmation";
-		}catch (Exception e) {
-			logger.debug("ERROR" , e);
-			return "error";
 		}
-		 
+		if (!isPaymentSuccessful) {
+			logger.debug("payment with id " + order.getPaymentId() + " was not successfull");
+			return "redirect:shippingInfo?error=PaymentError";
+		}
+		try {
+
+			EmailServices.sendOrderConfirmationToCustomer(order);
+			EmailServices.sendOrderToSeller(order);			
+		} catch (MessagingException e) {
+			logger.error("ERROR happened while sending email for confirmation", e);
+			e.printStackTrace();
+		} catch (IOException e) {
+			logger.error("ERROR happened while sending email", e);
+			e.printStackTrace();
+		}
+		
+		model.addAttribute("order", order);
+		inventoryServices.updateQuantityAfterOrder(order);
+		order.setStatus("Paid");
+		orderRepo.save(order);
+				
+		return "confirmation";
+				 
 		
 	}
 }

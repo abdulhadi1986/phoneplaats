@@ -30,7 +30,7 @@ public class OrderDetail {
 	@JoinColumn(name="prod_id")
 	private Product product;
 	@Column(name="selling_price")
-	private double sellingPrice;
+	private Double sellingPrice;
 	@Column(name="product_color")
 	private String productColor;
 	@Column(name="quantity")
@@ -62,10 +62,10 @@ public class OrderDetail {
 	}
 	
 	
-	public double getSellingPrice() {
+	public Double getSellingPrice() {
 		return sellingPrice;
 	}
-	public void setSellingPrice(double sellingPrice) {
+	public void setSellingPrice(Double sellingPrice) {
 		this.sellingPrice = sellingPrice;
 	}
 	@Override
