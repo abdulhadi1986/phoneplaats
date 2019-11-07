@@ -36,7 +36,7 @@
     <div class="product_details mt-45 mb-50">
 			<div class="container">
 				<div class="row">
-					<div id="productImages" class="col-md-6 border-right">
+					<div id="productImages" class="col-md-6 border-right p-2">
 							<div class="bd-example">
 								<div th:id="'productCarousel'+${product.getProductId()}" class="carousel slide" data-ride="carousel" data-interval="false">
 									<ol class="carousel-indicators">
@@ -77,8 +77,8 @@
 									<img class="img-fluid" th:src="@{/img/brand/accessories.jpg}" alt="zo-th-1"/>
 								</div>							
 							</div>
-						</div>  
-						<div id="productInfo" class="product_d_right col-lg-6 col-md-6">
+					</div>  
+					<div id="productInfo" class="product_d_right col-lg-6 col-md-6 p-2 border-bottom">
 						<form action="#" th:action="@{/addToShoppingCart}" name ="product" th:object="${product}" method="post">
 							<div id="productName">
 								<input type="hidden" class="form-control" name = "productId" th:field="*{productId}">

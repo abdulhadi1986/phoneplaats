@@ -1,6 +1,6 @@
 package nl.phoneplaats.phoneplaats.controllers;
 
-import java.util.ArrayList;
+
 import java.util.List;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletRequest;
@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import nl.phoneplaats.phoneplaats.dao.InventoryDao;
-import nl.phoneplaats.phoneplaats.dao.ProductDao;
 import nl.phoneplaats.phoneplaats.dto.Product;
 import nl.phoneplaats.phoneplaats.services.EmailServices;
 import nl.phoneplaats.phoneplaats.services.GeneralServices;
@@ -29,8 +28,6 @@ public class ProductController implements ErrorController{
 	
 	@Autowired
 	private InventoryDao inventoryDao;
-	@Autowired
-	private ProductDao productDao;
 	@Autowired
 	private ProductServices productServices;
 	@Autowired
@@ -46,13 +43,8 @@ public class ProductController implements ErrorController{
 								,@RequestParam(value="categoryId", required=false, defaultValue="0") int categoryId, ServletRequest request) {
 		
 		generalServices.setPageHeader(model, session);
+		List<Product> allProducts = inventoryDao.getAllProducts(categoryId);
 		
-		if (session.getAttribute("availableProducts") == null) {
-			session.setAttribute("availableProducts", inventoryDao.getAllProducts(categoryId));
-		}
-		
-		List<Product> allProducts = (List) session.getAttribute("availableProducts");
-		logger.debug("available : " + allProducts);
 		model.addAttribute("allProducts", allProducts);		
 		
 		return "home";		
@@ -65,9 +57,7 @@ public class ProductController implements ErrorController{
 				
 		generalServices.setPageHeader(model, session);			
 		Product product = productServices.setProductInfo(prodId);
-		product.setAvailableQty(generalServices.getProductInventory(product, session));
-		
-		if (product == null || product.getAvailableQty() < 1)
+		if (product == null || inventoryDao.getProductInventory(product) < 1)
 			return "redirect:/home";
 		model.addAttribute("product", product);
 		logger.debug("getting product details: "+ product.getProductName());

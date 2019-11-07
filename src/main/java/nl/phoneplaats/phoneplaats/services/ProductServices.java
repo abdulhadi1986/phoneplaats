@@ -4,8 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +14,6 @@ import nl.phoneplaats.phoneplaats.dto.Product;
 import nl.phoneplaats.phoneplaats.repo.CategoryRepo;
 import nl.phoneplaats.phoneplaats.repo.ImageRepo;
 import nl.phoneplaats.phoneplaats.repo.InventoryRepo;
-import nl.phoneplaats.phoneplaats.repo.ProductRepo;
 
 @Component
 public class ProductServices {
@@ -29,11 +26,7 @@ public class ProductServices {
 	@Autowired
 	private CategoryRepo categoryRepo;	
 	@Autowired
-	private ProductRepo productRepo;
-	@Autowired
 	private InventoryDao inventoryDao;
-	
-	private static final Logger logger = LoggerFactory.getLogger(ProductServices.class);
 	
 	public Product setProductInfo(int productId) {
 		Product product = new Product();
@@ -41,7 +34,7 @@ public class ProductServices {
 		if (product == null)
 			return null;
 		product.setProductImages(imageRepo.findByProduct(product));
-		//setProductQuantity(product);
+		setProductQuantity(product);
 		return product;
 	}
 	
